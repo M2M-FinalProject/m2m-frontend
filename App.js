@@ -22,8 +22,8 @@ function HomeNavigator() {
   return (
     <Tab.Navigator screenOptions={{ headerTitleAlign: 'center', headerStyle: { backgroundColor: '#FAF9FA' } }}>
       <Tab.Screen name='Home' component={Home} />
-      <Tab.Screen name='Products' component={Products} />
-      <Tab.Screen name='Profile' component={Profile} />
+      <Tab.Screen name='MyMatch' component={MyMatch} />
+      <Tab.Screen name='MatchRequest' component={MatchRequest} />
     </Tab.Navigator>
   )
 }
@@ -31,13 +31,16 @@ function HomeNavigator() {
 export default function App() {
 
   return (
-    <NavigationContainer>
-      <Stack.Navigator screenOptions={{ headerShown: false }}>
-        <Stack.Screen name="LandingPage" component={LandingPage}/>
-        <Stack.Screen name="Register" component={RegisterPage}/>
-        <Stack.Screen name="Login" component={LoginPage}/>
-        <Stack.Screen name="HomeNavigator" component={HomeNavigator}/>
-      </Stack.Navigator>
-    </NavigationContainer>
+    <Provider store={store}>
+      <NavigationContainer>
+        <Stack.Navigator screenOptions={{ headerShown: false }}>
+          <Stack.Screen name="LandingPage" component={LandingPage}/>
+          <Stack.Screen name="Register" component={RegisterPage}/>
+          <Stack.Screen name="Login" component={LoginPage}/>
+          <Stack.Screen name="HomeNavigator" component={HomeNavigator}/>
+        </Stack.Navigator>
+      </NavigationContainer>
+    </Provider>
+
   );
 }

@@ -46,7 +46,7 @@ export default function LoginPage({navigation}){
                 }
             }
             storeData(data.access_token, data.id )
-            navigation.navigate('LandingPage')
+            navigation.navigate('HomeNavigator')
         })
         .catch((err)=>{
             console.log(err);
