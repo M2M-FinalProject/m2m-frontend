@@ -20,19 +20,20 @@ export default function RegisterPage({navigation}){
                 </View>
                 <View style={styles.inputForm}>
                     <TextInput style={styles.input}placeholder="YOUR NAME" placeholderTextColor="#E14D2A"/>
-                    <TextInput style={styles.input}placeholder="DD/MM/YYYY" placeholderTextColor="#E14D2A"/>
                     {/* <TextInput style={styles.input}placeholder="SELECT GENDER" placeholderTextColor="#E14D2A"/> */}
-                    <Picker
+                    {/* <Picker
                         selectedValue={selectedGender}
                         style={styles.input}
                         onValueChange={(itemValue, itemIndex) => setSelectedGender(itemValue)}
                     >
                         <Picker.Item label="Male" value="male" />
                         <Picker.Item label="Female" value="female" />
-                    </Picker>
+                    </Picker> */}
                     <TextInput style={styles.input}placeholder="EMAIL" placeholderTextColor="#E14D2A"/>
-                    <TextInput style={styles.input}placeholder="PASSWORD" placeholderTextColor="#E14D2A"/>
-                    <TextInput style={styles.input}placeholder="CONFIRM PASSWORD" placeholderTextColor="#E14D2A"/>
+                    <TextInput style={styles.input}placeholder="PASSWORD"  secureTextEntry={true} placeholderTextColor="#E14D2A"/>
+                    <TextInput style={styles.input}placeholder="CONFIRM PASSWORD"
+                     secureTextEntry={true} placeholderTextColor="#E14D2A"/>
+                    <TextInput style={styles.input}placeholder="DESCRIBE YOUR SPORT ABILITY" placeholderTextColor="#E14D2A"/>
                     
                     <View style={styles.primaryButton}>
                         <Text style={styles.primaryText}>SIGN UP</Text>
