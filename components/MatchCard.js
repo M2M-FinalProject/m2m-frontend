@@ -1,42 +1,67 @@
-import { Text, TouchableOpacity, View, Image } from 'react-native'
-import { ButtonGroup } from '@rneui/themed'
+import { Text, View, Image } from "react-native";
 
-export default function MatchCard() {
+// export default function MatchCard({ name, location, category, date, capacity, currentCapacity }) {
+export default function MatchCard({ match }) {
     return (
-        <TouchableOpacity
+        <View
             style={{
-                flexDirection: "row",
-                backgroundColor: '#FD841F',
-                padding: 20,
-                marginHorizontal: 20,
-                borderRadius: 20,
-                alignItems: "center",
-                marginTop: 10
+                height: 200,
+                elevation: 3,
+                backgroundColor: "#FFF",
+                marginLeft: 20,
+                marginTop: 20,
+                borderRadius: 15,
+                marginBottom: 10,
+                width: '90%',
+                flexDirection: "row"
             }}
         >
             <Image
-                source={{ uri: 'https://awsimages.detik.net.id/community/media/visual/2020/11/03/agatha-chelsea_43.png?w=700&q=90' }}
-                style={{ width: 40, height: 40 }}
+                source={{ uri: 'https://img.olympicchannel.com/images/image/private/t_social_share_thumb/f_auto/primary/qjxgsf7pqdmyqzsptxju' }}
+                style={{
+                    width: '35%',
+                    height: '100%',
+                    borderTopLeftRadius: 15,
+                    borderBottomLeftRadius: 15,
+                }}
             />
-
-            <View>
-                <Text style={{
-                    color: "#fff",
-                    fontSize: 13,
+            <View style={{
+                width: '65%',
+                paddingTop: 10,
+                paddingHorizontal: 10
+            }}>
+                <View style={{
+                    backgroundColor: "#FD841F",
                     paddingHorizontal: 20,
-                    width: 170
-                }}>Agatha Chelsea</Text>
-                <Text style={{
-                    color: "#fff",
-                    fontSize: 12,
-                    paddingHorizontal: 20
+                    paddingVertical: 5,
+                    borderRadius: 15,
+                    marginBottom: 30
                 }}>
-                    Actress
+                    <Text style={{
+                        fontWeight: "bold",
+                        fontSize: 15,
+                        color: "#FFF",
+                        alignSelf: 'center'
+                    }}>{ match.categoryId }</Text>
+                </View>
+                <Text style={{
+                    fontWeight: "bold",
+                    color: "#FD841F",
+                }}>{ match.name }
+                </Text>
+                <Text style={{
+                    fontWeight: "bold",
+                }}>{ match.date }
+                </Text>
+                <Text style={{
+                    fontWeight: "bold",
+                }}>{ match.location }
+                </Text>
+                <Text style={{
+                    fontWeight: "bold",
+                }}>{match.currentCapacity} out of {match.capacity} person joined
                 </Text>
             </View>
-            
-            
-
-        </TouchableOpacity>
+        </View>
     )
 }

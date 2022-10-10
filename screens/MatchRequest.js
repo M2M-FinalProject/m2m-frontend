@@ -1,12 +1,12 @@
 import {Text,TouchableOpacity, View,Image} from 'react-native'
-import MatchCard from '../components/MatchCard'
+import ParticipantCard from '../components/ParticipantCard'
 
 export default function MatchRequest({img,title, bg}){
         return(
             <>
-                <MatchCard/>
-                <MatchCard/>
-                <MatchCard/>
+                <ParticipantCard/>
+                <ParticipantCard/>
+                <ParticipantCard/>
             </>
         )   
 }

@@ -1,7 +1,41 @@
-import { View, Text, StyleSheet, Image, ImageBackground, TextInput, ScrollView, Pressable } from 'react-native'
+import { ActivityIndicator, View, Text, StyleSheet, Image, ImageBackground, TextInput, ScrollView, Pressable, FlatList } from 'react-native'
 import { Chip } from '@rneui/themed'
+import { useSelector, useDispatch } from 'react-redux'
+import { fetchMatches } from '../store/actions/matchAction'
+import { useEffect } from 'react'
+import MatchCard from '../components/MatchCard'
 
 export default function Home() {
+    const dispatch = useDispatch()
+
+    const { matches, error } = useSelector(state => {
+        return state.matchReducer
+    })
+
+    useEffect(() => {
+        dispatch(fetchMatches())
+    }, [dispatch])
+
+    if (!matches) {
+        return (
+            <ActivityIndicator size='large' color='#ADD6FF' />
+        )
+    }
+
+    if (error) {
+        return (
+            <Text>
+                {JSON.stringify(error)}
+            </Text>
+        )
+    }
+
+    const renderItem = ({item}) => {
+        return (
+            <MatchCard match={item} />
+        )
+    }
+
     return (
         <View style={{
             backgroundColor: "#FFF",
@@ -69,7 +103,7 @@ export default function Home() {
                     height: 50
                 }}
                 contentContainerStyle={{ height: 40 }}
-                >
+            >
                 <Chip
                     color={'#FD841F'}
                     title={'Football'}
@@ -115,7 +149,7 @@ export default function Home() {
             </ScrollView>
 
 
-            <ScrollView
+            {/* <ScrollView
                 style={{ height: 400, display: 'flex', marginTop: -100 }}
                 contentContainerStyle={{ justifyContent: 'center' }}
             >
@@ -292,7 +326,16 @@ export default function Home() {
                     </View>
                 </View>
 
-            </ScrollView>
+            </ScrollView> */}
+
+            <FlatList
+                style={{ height: 400, display: 'flex', marginTop: -100 }}
+                contentContainerStyle={{ justifyContent: 'center' }}
+                data={matches} renderItem={renderItem} keyExtractor={(item,idx) => idx}
+            >
+                
+
+            </FlatList>
         </View>
     )
 }
