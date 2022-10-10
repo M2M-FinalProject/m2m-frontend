@@ -1,7 +1,9 @@
 import { View, Text, StyleSheet, Image, ImageBackground, TextInput, ScrollView, Pressable } from 'react-native'
-import { Chip } from '@rneui/themed'
+import { ButtonGroup } from '@rneui/themed'
+import { useState } from 'react';
 
 export default function Home() {
+    const [selectedIndex, setSelectedIndex] = useState(0);
     return (
         <View style={{
             backgroundColor: "#FFF",
@@ -17,107 +19,41 @@ export default function Home() {
                 <View style={{
                     flexDirection: "row",
                     alignItems: "center",
-                    width: "100%"
+                    width: "100%",
                 }}>
-                    <View style={{ width: "60%" }}>
+                    <View style={{
+                        width: "100%"
+                    }}>
                         <Text style={{
-                            fontSize: 28,
+                            marginTop: 20,
+                            fontSize: 25,
                             color: "#FFF",
                             fontWeight: "bold"
-                        }}>Welcome to Match 2 Match</Text>
+                        }}>All your joined match here
+                        </Text>
                     </View>
                 </View>
             </View>
-            <View
-                style={{
-                    left: 0,
-                    right: 0,
-                    height: 90,
-                    marginTop: -45
+
+            <ButtonGroup
+                buttons={['Approved', 'Pending']}
+                selectedIndex={selectedIndex}
+                onPress={(value) => {
+                    setSelectedIndex(value);
                 }}
-            >
-                <View style={{
-                    backgroundColor: "#FFF",
-                    paddingVertical: 8,
-                    paddingHorizontal: 20,
-                    marginHorizontal: 20,
-                    borderRadius: 15,
-                    marginTop: 25,
-                    flexDirection: "row",
-                    alignItems: "center",
-                    elevation: 2,
-                }}>
-                    <TextInput
-                        placeholder="Search"
-                        placeholderTextColor="#FD841F"
-                        style={{
-                            fontWeight: "bold",
-                            fontSize: 18,
-                            width: 260
-                        }}
-                    />
-                </View>
-            </View>
+                selectedButtonStyle={{
+                    backgroundColor: "#FD841F"
+                }}
+                containerStyle={{
+                    borderRadius:20,
+                    marginBottom: 0,
+                    marginTop: -50
+                }}
+            />
 
             <ScrollView
-                horizontal
-                style={{
-                    width: "90%",
-                    marginHorizontal: 20,
-                    flexDirection: 'row',
-                    // marginBottom: -100,
-                    height: 50
-                }}
-                contentContainerStyle={{ height: 40 }}
-                >
-                <Chip
-                    color={'#FD841F'}
-                    title={'Football'}
-                    containerStyle={{
-                        marginRight: 10,
-                    }}
-                />
-                <Chip
-                    color={'#FD841F'}
-                    title={'Basketball'}
-                    containerStyle={{
-                        marginRight: 10
-                    }}
-                />
-                <Chip
-                    color={'#FD841F'}
-                    title={'Tennis'}
-                    containerStyle={{
-                        marginRight: 10
-                    }}
-                />
-                <Chip
-                    color={'#FD841F'}
-                    title={'Jogging'}
-                    containerStyle={{
-                        marginRight: 10
-                    }}
-                />
-                <Chip
-                    color={'#FD841F'}
-                    title={'Futsal'}
-                    containerStyle={{
-                        marginRight: 10
-                    }}
-                />
-                <Chip
-                    color={'#FD841F'}
-                    title={'Swimming'}
-                    containerStyle={{
-                        marginRight: 10
-                    }}
-                />
-            </ScrollView>
-
-
-            <ScrollView
-                style={{ height: 400, display: 'flex', marginTop: -100 }}
-                contentContainerStyle={{ justifyContent: 'center' }}
+                style={{ height: 400 }}
+                contentContainerStyle={{ justifyContent: 'center'}}
             >
 
                 <View
@@ -174,6 +110,10 @@ export default function Home() {
                         <Text style={{
                             fontWeight: "bold",
                         }}>9 out of 15 person joined
+                        </Text>
+                        <Text style={{
+                            fontWeight: "bold",
+                        }}>3 person want to join this match
                         </Text>
                     </View>
                 </View>
@@ -232,6 +172,10 @@ export default function Home() {
                             fontWeight: "bold",
                         }}>9 out of 15 person joined
                         </Text>
+                        <Text style={{
+                            fontWeight: "bold",
+                        }}>3 person want to join this match
+                        </Text>
                     </View>
                 </View>
                 <View
@@ -288,6 +232,10 @@ export default function Home() {
                         <Text style={{
                             fontWeight: "bold",
                         }}>9 out of 15 person joined
+                        </Text>
+                        <Text style={{
+                            fontWeight: "bold",
+                        }}>3 person want to join this match
                         </Text>
                     </View>
                 </View>
