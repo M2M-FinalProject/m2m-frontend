@@ -5,9 +5,65 @@ import {
 } from 'react-native-safe-area-context';
 import { StatusBar } from 'expo-status-bar';
 import { useEffect, useState } from 'react';
+import React from "react";
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 export default function RegisterPage({navigation}){
-    const [selectedGender, setSelectedGender] = useState();
+    // const [selectedGender, setSelectedGender] = useState();
+
+    const [name, setName]= React.useState('')
+    const [email, setEmail]= React.useState('')
+    const [password, setPassword]= React.useState('')
+    const [confirmPass, setConfirmation]= React.useState('')
+    const [bio, setBio]= React.useState('')
+    const [typeWrong, setTypeWrong]= useState('')
+    // console.log(name, 'name');
+    // console.log(email, 'email');
+    // console.log(password, 'pass');
+    // console.log(confirmPass, 'con');
+    // console.log(bio, 'bio');
+    const storeData = async (value) => {
+        try {
+          await AsyncStorage.setItem('@storage_Key', value)
+        } catch (e) {
+          // saving error
+          console.log(e);
+        }
+    }
+    function regisNewUser(e){
+        e.preventDefault()
+        if(password != confirmPass){
+            console.log('iiii');
+            setTypeWrong('Password did not match')
+            return
+        }
+        // console.log(name, email, password, bio);
+        return fetch('https://m2m-api.herokuapp.com/register', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({name, email, password, bio})
+        })
+        .then((response)=>{
+            if(!response){
+                // console.log('hem');
+                throw new Error("Internal Server Error")
+            }
+            // console.log(response);
+            return response.json()
+        })
+        .then((data)=>{
+            console.log(data);
+            navigation.navigate('Login')
+        })
+        .catch((err)=>{
+            console.log('gee');
+            console.log(err, 'ini errornya');
+            setTypeWrong(err.message)
+            // console.log('geee');
+        })
+    }
     return(
         <SafeAreaView style={styles.container}>
             <StatusBar 
@@ -19,7 +75,10 @@ export default function RegisterPage({navigation}){
                     <Text style={styles.headerButSmaller}>NOW SETUP UR PROFILE</Text> 
                 </View>
                 <View style={styles.inputForm}>
-                    <TextInput style={styles.input}placeholder="YOUR NAME" placeholderTextColor="#E14D2A"/>
+                    <Text style={styles.errWarn}>{typeWrong}</Text>
+                    <TextInput style={styles.input}placeholder="YOUR NAME" 
+                    value={name}
+                    onChangeText={setName} placeholderTextColor="#E14D2A" />
                     {/* <TextInput style={styles.input}placeholder="SELECT GENDER" placeholderTextColor="#E14D2A"/> */}
                     {/* <Picker
                         selectedValue={selectedGender}
@@ -29,14 +88,20 @@ export default function RegisterPage({navigation}){
                         <Picker.Item label="Male" value="male" />
                         <Picker.Item label="Female" value="female" />
                     </Picker> */}
-                    <TextInput style={styles.input}placeholder="EMAIL" placeholderTextColor="#E14D2A"/>
-                    <TextInput style={styles.input}placeholder="PASSWORD"  secureTextEntry={true} placeholderTextColor="#E14D2A"/>
+                    <TextInput style={styles.input}placeholder="EMAIL" value={email}
+                    onChangeText={setEmail} placeholderTextColor="#E14D2A"/>
+                    <TextInput style={styles.input}placeholder="PASSWORD" value={password}
+                    onChangeText={setPassword}  secureTextEntry={true} placeholderTextColor="#E14D2A"/>
                     <TextInput style={styles.input}placeholder="CONFIRM PASSWORD"
-                     secureTextEntry={true} placeholderTextColor="#E14D2A"/>
-                    <TextInput style={styles.input}placeholder="DESCRIBE YOUR SPORT ABILITY" placeholderTextColor="#E14D2A"/>
+                    value={confirmPass}
+                    onChangeText={setConfirmation} secureTextEntry={true} placeholderTextColor="#E14D2A"/>
+                    <TextInput style={styles.input} value={bio}
+                    onChangeText={setBio} placeholder="DESCRIBE YOUR SPORT ABILITY" placeholderTextColor="#E14D2A"/>
                     
                     <View style={styles.primaryButton}>
-                        <Text style={styles.primaryText}>SIGN UP</Text>
+                        <TouchableOpacity onPress={regisNewUser}>
+                            <Text style={styles.primaryText}>SIGN UP</Text>
+                        </TouchableOpacity>
                     </View>
 
                 </View>
@@ -72,8 +137,12 @@ const styles = StyleSheet.create({
         backgroundColor: '#F6FFC1',
         color:"#E14D2A"
     },
-
-
+    errWarn: {
+        fontSize: 25,
+        color:'#F6FFC1',
+        fontFamily: 'Roboto',
+        textAlign:'center'
+    },
     headerText: {
         fontSize: 45,
         color: '#F6FFC1',
