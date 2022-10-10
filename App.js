@@ -9,8 +9,18 @@ import MatchRequest from './screens/MatchRequest';
 import { Provider } from 'react-redux'
 import store from './store';
 
-const Stack = createNativeStackNavigator()
+
+import { StatusBar } from 'expo-status-bar';
+import { StyleSheet, Text, View } from 'react-native';
+import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import { NavigationContainer} from '@react-navigation/native'
+import LandingPage from './screens/LandingPage'
+import RegisterPage from './screens/RegisterPage'
+import LoginPage from './screens/LoginPage'
+
+
 const Tab = createBottomTabNavigator()
+const Stack = createNativeStackNavigator()
 
 export default function App() {
   const [fontsLoaded] = useFonts({
@@ -23,15 +33,15 @@ export default function App() {
   }
 
   return (
-    <Provider store={store}>
-      <NavigationContainer>
-        <Tab.Navigator>
-          <Tab.Screen name='Home' component={Home} />
-          <Tab.Screen name='MyMatch' component={MyMatch} />
-          <Tab.Screen name='Participation' component={Participation} />
-          <Tab.Screen name='MatchRequest' component={MatchRequest} />
-        </Tab.Navigator>
-      </NavigationContainer>
-    </Provider>
+    <NavigationContainer>
+      <Tab.Navigator>
+        <Tab.Screen name='Home' component={Home} />
+      </Tab.Navigator>
+      <Stack.Navigator screenOptions={{ headerShown: false }}>
+        <Stack.Screen name="LandingPage" component={LandingPage}/>
+        <Stack.Screen name="Register" component={RegisterPage}/>
+        <Stack.Screen name="Login" component={LoginPage}/>
+      </Stack.Navigator>
+    </NavigationContainer>
   );
 }
