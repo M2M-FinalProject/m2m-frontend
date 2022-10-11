@@ -1,4 +1,4 @@
-import { View, Text, StyleSheet, Image, ImageBackground, TextInput, ScrollView, Pressable } from 'react-native'
+import { View, Text, ActivityIndicator } from 'react-native'
 import { ButtonGroup } from '@rneui/themed'
 import { useState } from 'react';
 import axios from 'axios';
@@ -8,31 +8,21 @@ import { FlatList } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 
-export default function Participation({navigation}) {
+export default function Participation({ navigation }) {
     const [selectedIndex, setSelectedIndex] = useState(0)
     const [userId, setUserId] = useState('')
     const [accToken, setAccToken] = useState('')
 
     const [matchData, setMatchData] = useState([])
 
-    async function setLocalStorage(){
+    async function fetchMatchApproved() {
         try {
-            const id = await AsyncStorage.getItem('@id')
             const access_token = await AsyncStorage.getItem('@access_token')
-
-            setUserId(id)
-            setAccToken(access_token)
-        } catch (error) {
-            console.log(error);
-        }
-    }
-
-    async function fetchMatchApproved(){
-        try {
-            const { data } = await axios.get(`https://m2m-api.herokuapp.com/matches?userId=${userId}&status=1`,
+            const id = await AsyncStorage.getItem('@id')
+            const { data } = await axios.get(`https://m2m-api.herokuapp.com/matches?userId=${id}&status=1`,
                 {
                     headers: {
-                        access_token: accToken
+                        access_token: access_token
                     }
                 })
             setMatchData(data)
@@ -41,27 +31,24 @@ export default function Participation({navigation}) {
         }
     }
 
-    async function fetchMatchPending(){
+    async function fetchMatchPending() {
         try {
-            const { data } = await axios.get(`https://m2m-api.herokuapp.com/matches?userId=${userId}&status=0`,
+            const access_token = await AsyncStorage.getItem('@access_token')
+            const id = await AsyncStorage.getItem('@id')
+            const { data } = await axios.get(`https://m2m-api.herokuapp.com/matches?userId=${id}&status=0`,
                 {
                     headers: {
-                        access_token: accToken
+                        access_token: access_token
                     }
                 })
             setMatchData(data)
         } catch (error) {
             console.log(error);
         }
-    } 
+    }
 
     useEffect(() => {
-        setLocalStorage()
-        fetchMatchApproved()
-    }, [])
-
-    useEffect(() => {
-        if(selectedIndex == 0){
+        if (selectedIndex == 0) {
             fetchMatchApproved()
         } else {
             fetchMatchPending()
@@ -80,7 +67,7 @@ export default function Participation({navigation}) {
         )
     }
 
-   
+
     return (
         <View style={{
             backgroundColor: "#FFF",
@@ -122,7 +109,7 @@ export default function Participation({navigation}) {
                     backgroundColor: "#FD841F"
                 }}
                 containerStyle={{
-                    borderRadius:20,
+                    borderRadius: 20,
                     marginBottom: 0,
                     marginTop: -50
                 }}
@@ -130,7 +117,7 @@ export default function Participation({navigation}) {
 
             <FlatList
                 style={{ height: 400 }}
-                contentContainerStyle={{ justifyContent: 'center'}}
+                contentContainerStyle={{ justifyContent: 'center' }}
                 data={matchData} renderItem={renderItem} keyExtractor={(item, idx) => idx}
             />
         </View>
