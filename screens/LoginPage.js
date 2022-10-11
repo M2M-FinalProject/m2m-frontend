@@ -14,7 +14,7 @@ export default function LoginPage({navigation}){
 
     const storeData = async (token, id) => {
         try {
-          await AsyncStorage.setItem('@access__token', token)
+          await AsyncStorage.setItem('@access_token', token)
           await AsyncStorage.setItem('@id', id.toString())
         } catch (e) {
           // saving error

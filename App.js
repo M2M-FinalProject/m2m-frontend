@@ -5,6 +5,7 @@ import Home from './screens/Home';
 import MyMatch from './screens/MyMatch';
 import Participation from './screens/Participation';
 import MatchRequest from './screens/MatchRequest';
+import MatchDetail from './screens/MatchDetail';
 import { Provider } from 'react-redux'
 import store from './store';
 
@@ -20,10 +21,10 @@ const Stack = createNativeStackNavigator()
 
 function HomeNavigator() {
   return (
-    <Tab.Navigator screenOptions={{ headerTitleAlign: 'center', headerStyle: { backgroundColor: '#FAF9FA' } }}>
+    <Tab.Navigator screenOptions={{ headerShown: false, headerStyle: { backgroundColor: '#FAF9FA' } }}>
       <Tab.Screen name='Home' component={Home} />
       <Tab.Screen name='MyMatch' component={MyMatch} />
-      <Tab.Screen name='MatchRequest' component={MatchRequest} />
+      <Tab.Screen name='Participation' component={Participation} />
     </Tab.Navigator>
   )
 }
@@ -32,15 +33,16 @@ export default function App() {
 
   return (
     <Provider store={store}>
-      <NavigationContainer>
-        <Stack.Navigator screenOptions={{ headerShown: false }}>
-          <Stack.Screen name="LandingPage" component={LandingPage}/>
-          <Stack.Screen name="Register" component={RegisterPage}/>
-          <Stack.Screen name="Login" component={LoginPage}/>
-          <Stack.Screen name="HomeNavigator" component={HomeNavigator}/>
-        </Stack.Navigator>
-      </NavigationContainer>
+        <NavigationContainer>
+          <Stack.Navigator screenOptions={{ headerShown: false }}>
+            <Stack.Screen name="Login" component={LoginPage} />
+            <Stack.Screen name="HomeNavigator" component={HomeNavigator} />
+            <Tab.Screen name='MatchDetail' component={MatchDetail} />
+            <Tab.Screen name='MatchRequest' component={MatchRequest} />
+            <Stack.Screen name="LandingPage" component={LandingPage} />
+            <Stack.Screen name="Register" component={RegisterPage} />
+          </Stack.Navigator>
+        </NavigationContainer>
     </Provider>
-
   );
 }

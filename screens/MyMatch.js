@@ -1,7 +1,48 @@
-import { View, Text, StyleSheet, Image, ImageBackground, TextInput, ScrollView, Pressable } from 'react-native'
-import { Chip } from '@rneui/themed'
+import { View, Text } from 'react-native'
+import { FlatList } from 'react-native'
+import axios from 'axios'
+import { useEffect, useState } from 'react'
+import MatchCard from '../components/MatchCard'
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
-export default function Home() {
+export default function MyMatch({ navigation }) {
+    const [matchData, setMatchData] = useState([])
+    const [userId, setUserId] = useState('')
+    const [accToken, setaccToken] = useState('')
+
+    async function fetchMatchData() {
+        try {
+            const id = await AsyncStorage.getItem('@id')
+            const access_token = await AsyncStorage.getItem('@access_token')
+            const { data } = await axios.get('https://m2m-api.herokuapp.com/matches?userId=' + id,
+                {
+                    headers: {
+                        access_token: access_token
+                    }
+                })
+            setMatchData(data)
+        } catch (error) {
+            console.log(error);
+        }
+    }
+
+
+    useEffect(() => {
+        fetchMatchData()
+    }, [])
+
+    if (!matchData) {
+        return (
+            <ActivityIndicator size='large' color='#ADD6FF' />
+        )
+    }
+
+    const renderItem = ({ item }) => {
+        return (
+            <MatchCard match={item} navigation={navigation} />
+        )
+    }
+
     return (
         <View style={{
             backgroundColor: "#FFF",
@@ -19,210 +60,22 @@ export default function Home() {
                     alignItems: "center",
                     width: "100%",
                 }}>
-                    <View style={{ 
-                        width: "60%"
-                         }}>
+                    <View style={{ width: "60%" }}>
                         <Text style={{
-                            marginTop: 20,
-                            fontSize: 25,
+                            fontSize: 28,
                             color: "#FFF",
-                            fontWeight: "bold"
-                        }}>All your created match here
-                        </Text>
+                            fontWeight: "bold",
+                            marginTop: 40
+                        }}>All your created match here</Text>
                     </View>
                 </View>
             </View>
 
-            <ScrollView
-                style={{ height: 400, marginTop: -50 }}
+            <FlatList
+                style={{ height: 400 }}
                 contentContainerStyle={{ justifyContent: 'center' }}
-            >
-
-                <View
-                    // onPress={()=>navigation.navigate("Detail")}
-                    style={{
-                        height: 200,
-                        elevation: 3,
-                        backgroundColor: "#FFF",
-                        marginLeft: 20,
-                        marginTop: 20,
-                        borderRadius: 15,
-                        marginBottom: 10,
-                        width: '90%',
-                        flexDirection: "row"
-                    }}
-                >
-                    <Image
-                        source={{ uri: 'https://img.olympicchannel.com/images/image/private/t_social_share_thumb/f_auto/primary/qjxgsf7pqdmyqzsptxju' }}
-                        style={{
-                            width: '35%',
-                            height: '100%',
-                            borderTopLeftRadius: 15,
-                            borderBottomLeftRadius: 15,
-                        }}
-                    />
-                    <View style={{
-                        width: '65%',
-                        paddingTop: 10,
-                        paddingHorizontal: 10
-                    }}>
-                        <View style={{
-                            backgroundColor: "#FD841F",
-                            paddingHorizontal: 20,
-                            paddingVertical: 5,
-                            borderRadius: 15,
-                            marginBottom: 30
-                        }}>
-                            <Text style={{
-                                fontWeight: "bold",
-                                fontSize: 15,
-                                color: "#FFF",
-                                alignSelf: 'center'
-                            }}>Football</Text>
-                        </View>
-                        <Text style={{
-                            fontWeight: "bold",
-                            color: "#FD841F",
-                        }}>09/10/2022 01:00 PM
-                        </Text>
-                        <Text style={{
-                            fontWeight: "bold",
-                        }}>Jakarta Utara
-                        </Text>
-                        <Text style={{
-                            fontWeight: "bold",
-                        }}>9 out of 15 person joined
-                        </Text>
-                        <Text style={{
-                            fontWeight: "bold",
-                        }}>3 person want to join this match
-                        </Text>
-                    </View>
-                </View>
-                <View
-                    // onPress={()=>navigation.navigate("Detail")}
-                    style={{
-                        height: 200,
-                        elevation: 3,
-                        backgroundColor: "#FFF",
-                        marginLeft: 20,
-                        marginTop: 20,
-                        borderRadius: 15,
-                        marginBottom: 10,
-                        width: '90%',
-                        flexDirection: "row"
-                    }}
-                >
-                    <Image
-                        source={{ uri: 'https://i.pinimg.com/originals/ee/b4/c2/eeb4c283836bab1b3aebb183551b5219.jpg' }}
-                        style={{
-                            width: '35%',
-                            height: '100%',
-                            borderTopLeftRadius: 15,
-                            borderBottomLeftRadius: 15,
-                        }}
-                    />
-                    <View style={{
-                        width: '65%',
-                        paddingTop: 10,
-                        paddingHorizontal: 10
-                    }}>
-                        <View style={{
-                            backgroundColor: "#FD841F",
-                            paddingHorizontal: 20,
-                            paddingVertical: 5,
-                            borderRadius: 15,
-                            marginBottom: 30
-                        }}>
-                            <Text style={{
-                                fontWeight: "bold",
-                                fontSize: 15,
-                                color: "#FFF",
-                                alignSelf: 'center'
-                            }}>Tennis</Text>
-                        </View>
-                        <Text style={{
-                            fontWeight: "bold",
-                            color: "#FD841F",
-                        }}>09/10/2022 01:00 PM
-                        </Text>
-                        <Text style={{
-                            fontWeight: "bold",
-                        }}>Jakarta Utara
-                        </Text>
-                        <Text style={{
-                            fontWeight: "bold",
-                        }}>9 out of 15 person joined
-                        </Text>
-                        <Text style={{
-                            fontWeight: "bold",
-                        }}>3 person want to join this match
-                        </Text>
-                    </View>
-                </View>
-                <View
-                    // onPress={()=>navigation.navigate("Detail")}
-                    style={{
-                        height: 200,
-                        elevation: 3,
-                        backgroundColor: "#FFF",
-                        marginLeft: 20,
-                        marginTop: 20,
-                        borderRadius: 15,
-                        marginBottom: 10,
-                        width: '90%',
-                        flexDirection: "row"
-                    }}
-                >
-                    <Image
-                        source={{ uri: 'https://img.freepik.com/premium-photo/teen-boy-coaching-his-girlfriend-playing-basketball-street-basketball-game_116407-3516.jpg?w=2000' }}
-                        style={{
-                            width: '35%',
-                            height: '100%',
-                            borderTopLeftRadius: 15,
-                            borderBottomLeftRadius: 15,
-                        }}
-                    />
-                    <View style={{
-                        width: '65%',
-                        paddingTop: 10,
-                        paddingHorizontal: 10
-                    }}>
-                        <View style={{
-                            backgroundColor: "#FD841F",
-                            paddingHorizontal: 20,
-                            paddingVertical: 5,
-                            borderRadius: 15,
-                            marginBottom: 30
-                        }}>
-                            <Text style={{
-                                fontWeight: "bold",
-                                fontSize: 15,
-                                color: "#FFF",
-                                alignSelf: 'center'
-                            }}>Basketball</Text>
-                        </View>
-                        <Text style={{
-                            fontWeight: "bold",
-                            color: "#FD841F",
-                        }}>09/10/2022 01:00 PM
-                        </Text>
-                        <Text style={{
-                            fontWeight: "bold",
-                        }}>Jakarta Utara
-                        </Text>
-                        <Text style={{
-                            fontWeight: "bold",
-                        }}>9 out of 15 person joined
-                        </Text>
-                        <Text style={{
-                            fontWeight: "bold",
-                        }}>3 person want to join this match
-                        </Text>
-                    </View>
-                </View>
-
-            </ScrollView>
+                data={matchData} renderItem={renderItem} keyExtractor={(item, idx) => idx}
+            />
         </View>
     )
 }
