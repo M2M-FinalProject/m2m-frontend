@@ -44,6 +44,7 @@ export default function MatchDetail({ route, navigation }) {
                         access_token: access_token
                     }
                 })
+            fetchDetail()
         } catch (error) {
             console.log(error.response.data.message);
         }
@@ -69,7 +70,7 @@ export default function MatchDetail({ route, navigation }) {
     let button
     let user = detailData.MatchDetails.find(el => el.UserId == userId)
 
-    if(detailData.UserId == userId){
+    if (detailData.UserId == userId) {
         button = (
             <Button
                 onPress={() => toRequest()}
@@ -83,7 +84,7 @@ export default function MatchDetail({ route, navigation }) {
     } else if (!user) {
         button = (
             <Button
-                onPress={() => toRequest()}
+                onPress={() => joinMatch()}
                 title={'Request to join match'}
                 buttonStyle={{
                     borderRadius: 25
@@ -108,6 +109,18 @@ export default function MatchDetail({ route, navigation }) {
             <Button
                 disabled='true'
                 title={'Pending for approval...'}
+                buttonStyle={{
+                    borderRadius: 25
+                }}
+            >
+            </Button>
+        )
+    } else if (user.status == 2) {
+        button = (
+            <Button
+                disabled='true'
+                type="clear"
+                title={'You are rejected by the match master'}
                 buttonStyle={{
                     borderRadius: 25
                 }}

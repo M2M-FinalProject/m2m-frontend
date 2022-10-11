@@ -4,7 +4,7 @@ import axios from 'axios'
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 
-export default function UserCard({ request }) {
+export default function UserCard({ request, fetchMatchRequest }) {
 
     async function acceptRequest() {
         try {
@@ -13,32 +13,35 @@ export default function UserCard({ request }) {
             console.log(request.UserId);
             console.log(request.MatchId);
             const { data } = await axios({
-                method: 'patch',
+                method: 'PATCH',
                 url: `https://m2m-api.herokuapp.com/matches/${request.MatchId}/participants/${request.UserId}`,
                 data: {
                     status: 1
                 },
-                headers: access_token
+                headers: {
+                    access_token: access_token
+                }
             })
-
-            // const {data} = await axios.patch({}`https://m2m-api.herokuapp.com/matches/${request.MatchId}/participants/${request.UserId}`, {
-            //     status : 1
-            // },{
-            //     headers: access_token
-            // })
+            fetchMatchRequest()
         } catch (error) {
-            console.log(error)
+            console.log(error.response.data.message)
         }
     }
 
     async function rejectRequest() {
         try {
             const access_token = await AsyncStorage.getItem('@access_token')
-            const { data } = await axios.patch(`https://m2m-api.herokuapp.com/matches/${request.MatchId}/participants/${request.UserId}`, {
-                status: 2
-            }, {
-                headers: access_token
+            const { data } = await axios({
+                method: 'PATCH',
+                url: `https://m2m-api.herokuapp.com/matches/${request.MatchId}/participants/${request.UserId}`,
+                data: {
+                    status: 2
+                },
+                headers: {
+                    access_token: access_token
+                }
             })
+            fetchMatchRequest()
         } catch (error) {
             console.log(error)
         }
