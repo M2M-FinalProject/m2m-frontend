@@ -1,9 +1,15 @@
-import { Text, View, Image } from "react-native";
+import { Text, View, Image, Pressable, TouchableOpacity } from "react-native";
 
-// export default function MatchCard({ name, location, category, date, capacity, currentCapacity }) {
-export default function MatchCard({ match }) {
+export default function MatchCard({ match, navigation }) {
+    function goToDetail() {
+        navigation.navigate('MatchDetail', {
+            id: match.id,
+            navigation: navigation
+        })
+    }
     return (
-        <View
+        <TouchableOpacity
+            onPress={() => goToDetail()}
             style={{
                 height: 200,
                 elevation: 3,
@@ -17,7 +23,7 @@ export default function MatchCard({ match }) {
             }}
         >
             <Image
-                source={{ uri: 'https://img.olympicchannel.com/images/image/private/t_social_share_thumb/f_auto/primary/qjxgsf7pqdmyqzsptxju' }}
+                source={{ uri: match.Category.image }}
                 style={{
                     width: '35%',
                     height: '100%',
@@ -42,26 +48,26 @@ export default function MatchCard({ match }) {
                         fontSize: 15,
                         color: "#FFF",
                         alignSelf: 'center'
-                    }}>{ match.categoryId }</Text>
+                    }}>{match.Category.name}</Text>
                 </View>
                 <Text style={{
                     fontWeight: "bold",
                     color: "#FD841F",
-                }}>{ match.name }
+                }}>{match.name}
                 </Text>
                 <Text style={{
                     fontWeight: "bold",
-                }}>{ match.date }
+                }}>{match.date}
                 </Text>
                 <Text style={{
                     fontWeight: "bold",
-                }}>{ match.location }
+                }}>{match.location}
                 </Text>
                 <Text style={{
                     fontWeight: "bold",
                 }}>{match.currentCapacity} out of {match.capacity} person joined
                 </Text>
             </View>
-        </View>
+        </TouchableOpacity>
     )
 }

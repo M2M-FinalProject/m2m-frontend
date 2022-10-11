@@ -14,7 +14,7 @@ export default function LoginPage({navigation}){
 
     const storeData = async (token, id) => {
         try {
-          await AsyncStorage.setItem('@access__token', token)
+          await AsyncStorage.setItem('@access_token', token)
           await AsyncStorage.setItem('@id', id.toString())
         } catch (e) {
           // saving error
@@ -46,7 +46,7 @@ export default function LoginPage({navigation}){
                 }
             }
             storeData(data.access_token, data.id )
-            navigation.navigate('LandingPage')
+            navigation.navigate('HomeNavigator')
         })
         .catch((err)=>{
             console.log(err);
