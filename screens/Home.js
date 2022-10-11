@@ -2,19 +2,36 @@ import { ActivityIndicator, View, Text, TextInput, ScrollView, FlatList } from '
 import { Chip } from '@rneui/themed'
 import { useSelector, useDispatch } from 'react-redux'
 import { fetchMatches } from '../store/actions/matchAction'
-import { useEffect, useState} from 'react'
+import { useEffect, useState } from 'react'
 import MatchCard from '../components/MatchCard'
-import { StatusBar } from 'expo-status-bar';
+import axios from 'axios'
+import AsyncStorage from '@react-native-async-storage/async-storage'
 
-export default function Home({navigation}) {
+export default function Home({ navigation }) {
     const dispatch = useDispatch()
+    const [chips, setChips] = useState([])
+    const [text, setText] = useState('');
+    const [category, setCategory] = useState('');
 
     const { matches, error } = useSelector(state => {
         return state.matchReducer
     })
 
+    async function fetchChips() {
+        try {
+            const access_token = await AsyncStorage.getItem('@access_token')
+            const { data } = await axios.get(`https://m2m-api.herokuapp.com/categories`, {
+                headers: access_token
+            })
+            setChips(data)
+        } catch (error) {
+            console.log(error);
+        }
+    }
+
     useEffect(() => {
         dispatch(fetchMatches())
+        fetchChips()
     }, [dispatch])
 
     if (!matches) {
@@ -55,13 +72,13 @@ export default function Home({navigation}) {
                     alignItems: "center",
                     width: "100%"
                 }}>
-                    <View style={{ width: "60%" }}>
+                    <View style={{ width: "90%" }}>
                         <Text style={{
                             fontSize: 28,
                             color: "#FFF",
                             fontWeight: "bold",
-                            marginTop: 45,
-                        }}>Welcome to Match 2 Match</Text>
+                            marginTop: 50,
+                        }}>Welcome to M2M</Text>
                     </View>
                 </View>
             </View>
@@ -85,19 +102,21 @@ export default function Home({navigation}) {
                     elevation: 2,
                 }}>
                     <TextInput
-                        placeholder="Search"
+                        placeholder="Search by Location"
                         placeholderTextColor="#FD841F"
                         style={{
                             fontWeight: "bold",
                             fontSize: 18,
                             width: 260
                         }}
+                        onChangeText={newText => setText(newText)}
+                        defaultValue={text}
                     />
                 </View>
             </View>
 
             <View >
-                <ScrollView
+                {/* <ScrollView
                     horizontal
                     showsHorizontalScrollIndicator={false}
                     style={{
@@ -149,6 +168,46 @@ export default function Home({navigation}) {
                             marginRight: 10
                         }}
                     />
+                </ScrollView> */}
+
+                <ScrollView
+                    horizontal
+                    showsHorizontalScrollIndicator={false}
+                    style={{
+                        width: "90%",
+                        marginHorizontal: 20,
+                        flexDirection: 'row'
+                    }}
+                    contentContainerStyle={{ height: 40 }}
+                >
+                    <Chip
+                        type='outline'
+                        color={'#FD841F'}
+                        title='All'
+                        buttonStyle={{
+                            marginRight: 10,
+                            borderColor: '#FD841F'
+                        }}
+                        titleStyle={{
+                            color: '#FD841F'
+                        }}
+                    />
+                    {chips.map(element => {
+                        return (
+                            <Chip key={element.id}
+                                type='outline'
+                                color={'#FD841F'}
+                                title={element.name}
+                                buttonStyle={{
+                                    marginRight: 10,
+                                    borderColor: '#FD841F'
+                                }}
+                                titleStyle={{
+                                    color: '#FD841F'
+                                }}
+                            />
+                        )
+                    })}
                 </ScrollView>
             </View>
 
@@ -156,7 +215,12 @@ export default function Home({navigation}) {
             <FlatList
                 style={{ height: 400 }}
                 contentContainerStyle={{ justifyContent: 'center' }}
-                data={matches} renderItem={renderItem} keyExtractor={(item, idx) => idx}
+                data={
+                    matches.filter(el => el.location.toLowerCase().includes(text.toLowerCase()))
+
+                }
+                renderItem={renderItem}
+                keyExtractor={(item, idx) => idx}
             />
         </View>
     )

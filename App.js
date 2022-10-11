@@ -35,11 +35,11 @@ export default function App() {
     <Provider store={store}>
         <NavigationContainer>
           <Stack.Navigator screenOptions={{ headerShown: false }}>
+            <Stack.Screen name="LandingPage" component={LandingPage} />
             <Stack.Screen name="Login" component={LoginPage} />
             <Stack.Screen name="HomeNavigator" component={HomeNavigator} />
             <Tab.Screen name='MatchDetail' component={MatchDetail} />
             <Tab.Screen name='MatchRequest' component={MatchRequest} />
-            <Stack.Screen name="LandingPage" component={LandingPage} />
             <Stack.Screen name="Register" component={RegisterPage} />
           </Stack.Navigator>
         </NavigationContainer>

@@ -36,8 +36,6 @@ export default function MatchDetail({ route, navigation }) {
     async function joinMatch() {
         try {
             const access_token = await AsyncStorage.getItem('@access_token')
-            console.log(access_token);
-            console.log(detailData.id);
             const { data } = await axios.post(`https://m2m-api.herokuapp.com/matches/${detailData.id}/join`, null,
                 {
                     headers: {
@@ -68,6 +66,7 @@ export default function MatchDetail({ route, navigation }) {
     }
 
     let button
+    let showchat
     let user = detailData.MatchDetails.find(el => el.UserId == userId)
 
     if (detailData.UserId == userId) {
@@ -98,6 +97,17 @@ export default function MatchDetail({ route, navigation }) {
                 disabled='true'
                 type="clear"
                 title={'Already Joined'}
+                buttonStyle={{
+                    borderRadius: 25
+                }}
+            >
+            </Button>
+        )
+
+        showchat = (
+            <Button
+                title={'Show Chat'}
+                // onPress={() => joinMatch()}
                 buttonStyle={{
                     borderRadius: 25
                 }}
@@ -230,16 +240,7 @@ export default function MatchDetail({ route, navigation }) {
                     }}
                 >
 
-                    {!userId == detailData.UserId &&
-                        <Button
-                            title={'Join Match'}
-                            onPress={() => joinMatch()}
-                            buttonStyle={{
-                                borderRadius: 25
-                            }}
-                        >
-                        </Button>
-                    }
+                    {showchat}
 
 
                 </View>
