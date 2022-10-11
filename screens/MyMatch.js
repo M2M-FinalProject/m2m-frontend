@@ -7,8 +7,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 
 export default function MyMatch({ navigation }) {
     const [matchData, setMatchData] = useState([])
-    const [userId, setUserId] = useState('')
-    const [accToken, setaccToken] = useState('')
+    
 
     async function fetchMatchData() {
         try {

@@ -7,6 +7,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 
 export default function MatchDetail({ route, navigation }) {
     const [detailData, setDetailData] = useState({})
+    const [userId, setUserId] = useState('')
 
     async function fetchDetail() {
         try {
@@ -23,12 +24,21 @@ export default function MatchDetail({ route, navigation }) {
         }
     }
 
-    async function joinMatch(){
+    async function getLocalStorage() {
+        try {
+            const id = await AsyncStorage.getItem('@id')
+            setUserId(id)
+        } catch (error) {
+            console.log(error);
+        }
+    }
+
+    async function joinMatch() {
         try {
             const access_token = await AsyncStorage.getItem('@access_token')
             console.log(access_token);
             console.log(detailData.id);
-            const { data } = await axios.post(`https://m2m-api.herokuapp.com/matches/${detailData.id}/join`,null,
+            const { data } = await axios.post(`https://m2m-api.herokuapp.com/matches/${detailData.id}/join`, null,
                 {
                     headers: {
                         access_token: access_token
@@ -41,6 +51,7 @@ export default function MatchDetail({ route, navigation }) {
 
     useEffect(() => {
         fetchDetail()
+        getLocalStorage()
     }, [])
 
     function toRequest() {
@@ -54,6 +65,57 @@ export default function MatchDetail({ route, navigation }) {
             <ActivityIndicator size='large' color='#ADD6FF' />
         )
     }
+
+    let button
+    let user = detailData.MatchDetails.find(el => el.UserId == userId)
+
+    if(detailData.UserId == userId){
+        button = (
+            <Button
+                onPress={() => toRequest()}
+                title={'See join requests'}
+                buttonStyle={{
+                    borderRadius: 25
+                }}
+            >
+            </Button>
+        )
+    } else if (!user) {
+        button = (
+            <Button
+                onPress={() => toRequest()}
+                title={'Request to join match'}
+                buttonStyle={{
+                    borderRadius: 25
+                }}
+            >
+            </Button>
+        )
+    } else if (user.status == 1) {
+        button = (
+            <Button
+                disabled='true'
+                type="clear"
+                title={'Already Joined'}
+                buttonStyle={{
+                    borderRadius: 25
+                }}
+            >
+            </Button>
+        )
+    } else if (user.status == 0) {
+        button = (
+            <Button
+                disabled='true'
+                title={'Pending for approval...'}
+                buttonStyle={{
+                    borderRadius: 25
+                }}
+            >
+            </Button>
+        )
+    }
+
 
     return (
         <View
@@ -144,15 +206,7 @@ export default function MatchDetail({ route, navigation }) {
                         paddingHorizontal: 10
                     }}
                 >
-                    <Button
-                    onPress={()=>toRequest()}
-                        title={'See join requests'}
-                        buttonStyle={{
-                            borderRadius: 25
-                        }}
-                    >
-
-                    </Button>
+                    {button}
 
                 </View>
                 <View
@@ -162,15 +216,18 @@ export default function MatchDetail({ route, navigation }) {
                         paddingHorizontal: 10
                     }}
                 >
-                    <Button
-                        title={'Join Match'}
-                        onPress={()=>joinMatch()}
-                        buttonStyle={{
-                            borderRadius: 25
-                        }}
-                    >
 
-                    </Button>
+                    {!userId == detailData.UserId &&
+                        <Button
+                            title={'Join Match'}
+                            onPress={() => joinMatch()}
+                            buttonStyle={{
+                                borderRadius: 25
+                            }}
+                        >
+                        </Button>
+                    }
+
 
                 </View>
             </View>

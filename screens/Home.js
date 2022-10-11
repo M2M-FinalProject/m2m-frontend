@@ -2,7 +2,7 @@ import { ActivityIndicator, View, Text, TextInput, ScrollView, FlatList } from '
 import { Chip } from '@rneui/themed'
 import { useSelector, useDispatch } from 'react-redux'
 import { fetchMatches } from '../store/actions/matchAction'
-import { useEffect } from 'react'
+import { useEffect, useState} from 'react'
 import MatchCard from '../components/MatchCard'
 import { StatusBar } from 'expo-status-bar';
 

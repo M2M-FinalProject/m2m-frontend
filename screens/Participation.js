@@ -5,18 +5,34 @@ import axios from 'axios';
 import { useEffect } from 'react'
 import MatchCard from '../components/MatchCard'
 import { FlatList } from 'react-native';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+
 
 export default function Participation({navigation}) {
     const [selectedIndex, setSelectedIndex] = useState(0)
+    const [userId, setUserId] = useState('')
+    const [accToken, setAccToken] = useState('')
 
     const [matchData, setMatchData] = useState([])
 
-    async function fetchMatchData(){
+    async function setLocalStorage(){
         try {
-            const { data } = await axios.get('https://m2m-api.herokuapp.com/matches?userId=1',
+            const id = await AsyncStorage.getItem('@id')
+            const access_token = await AsyncStorage.getItem('@access_token')
+
+            setUserId(id)
+            setAccToken(access_token)
+        } catch (error) {
+            console.log(error);
+        }
+    }
+
+    async function fetchMatchApproved(){
+        try {
+            const { data } = await axios.get(`https://m2m-api.herokuapp.com/matches?userId=${userId}&status=1`,
                 {
                     headers: {
-                        access_token: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwiaWF0IjoxNjY1NDE1MDk1fQ.X_S7m7KTRKq1jXUOKX2sWRyVBHMNm2RnzfMjSZdgR_g"
+                        access_token: accToken
                     }
                 })
             setMatchData(data)
@@ -25,9 +41,32 @@ export default function Participation({navigation}) {
         }
     }
 
+    async function fetchMatchPending(){
+        try {
+            const { data } = await axios.get(`https://m2m-api.herokuapp.com/matches?userId=${userId}&status=0`,
+                {
+                    headers: {
+                        access_token: accToken
+                    }
+                })
+            setMatchData(data)
+        } catch (error) {
+            console.log(error);
+        }
+    } 
+
     useEffect(() => {
-        fetchMatchData()
+        setLocalStorage()
+        fetchMatchApproved()
     }, [])
+
+    useEffect(() => {
+        if(selectedIndex == 0){
+            fetchMatchApproved()
+        } else {
+            fetchMatchPending()
+        }
+    }, [selectedIndex])
 
     if (!matchData) {
         return (
@@ -74,7 +113,7 @@ export default function Participation({navigation}) {
             </View>
 
             <ButtonGroup
-                buttons={['Pending', 'Approved']}
+                buttons={['Approved', 'Pending']}
                 selectedIndex={selectedIndex}
                 onPress={(value) => {
                     setSelectedIndex(value);
@@ -92,7 +131,7 @@ export default function Participation({navigation}) {
             <FlatList
                 style={{ height: 400 }}
                 contentContainerStyle={{ justifyContent: 'center'}}
-                data={matchData.filter(el => el.status === selectedIndex)} renderItem={renderItem} keyExtractor={(item, idx) => idx}
+                data={matchData} renderItem={renderItem} keyExtractor={(item, idx) => idx}
             />
         </View>
     )

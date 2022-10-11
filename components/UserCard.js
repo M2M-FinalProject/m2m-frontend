@@ -1,8 +1,48 @@
 import { Text, TouchableOpacity, View, Image } from 'react-native'
 import { Button, ButtonGroup } from '@rneui/themed'
+import axios from 'axios'
+import AsyncStorage from '@react-native-async-storage/async-storage';
+
 
 export default function UserCard({ request }) {
-    // PATCH /matches/:matchId/participants/:participantId
+
+    async function acceptRequest() {
+        try {
+            const access_token = await AsyncStorage.getItem('@access_token')
+            console.log(access_token);
+            console.log(request.UserId);
+            console.log(request.MatchId);
+            const { data } = await axios({
+                method: 'patch',
+                url: `https://m2m-api.herokuapp.com/matches/${request.MatchId}/participants/${request.UserId}`,
+                data: {
+                    status: 1
+                },
+                headers: access_token
+            })
+
+            // const {data} = await axios.patch({}`https://m2m-api.herokuapp.com/matches/${request.MatchId}/participants/${request.UserId}`, {
+            //     status : 1
+            // },{
+            //     headers: access_token
+            // })
+        } catch (error) {
+            console.log(error)
+        }
+    }
+
+    async function rejectRequest() {
+        try {
+            const access_token = await AsyncStorage.getItem('@access_token')
+            const { data } = await axios.patch(`https://m2m-api.herokuapp.com/matches/${request.MatchId}/participants/${request.UserId}`, {
+                status: 2
+            }, {
+                headers: access_token
+            })
+        } catch (error) {
+            console.log(error)
+        }
+    }
 
     return (
         <View
@@ -45,18 +85,21 @@ export default function UserCard({ request }) {
                 style={{
                     height: 80,
                     width: '30%',
-                    flexDirection:'column',
-                    justifyContent:'space-between'
+                    flexDirection: 'column',
+                    justifyContent: 'space-between'
                 }}
             >
                 <Button
                     size='sm'
                     title='Accept'
+                    onPress={() => acceptRequest()}
                 />
                 <Button
                     size='sm'
                     title='Reject'
                     color={'#E14D2A'}
+                    onPress={() => rejectRequest()}
+
                 />
 
             </View>
