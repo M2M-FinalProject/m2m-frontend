@@ -29,7 +29,7 @@ export default function MatchRequest({ route }) {
 
     const renderItem = ({ item }) => {
         return (
-            <UserCard request={item} />
+            <UserCard request={item} fetchMatchRequest={fetchMatchRequest} />
         )
     }
 
