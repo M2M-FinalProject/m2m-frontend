@@ -3,7 +3,6 @@ import { ButtonGroup } from '@rneui/themed'
 import { useState, useCallback } from 'react';
 import { useFocusEffect } from '@react-navigation/native';
 import axios from 'axios';
-import { useEffect,useState } from 'react'
 import MatchCard from '../components/MatchCard'
 import { FlatList } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
