@@ -54,6 +54,22 @@ export default function MatchDetail({ route, navigation }) {
         }
     }
 
+    async function leaveMatch() {
+        try {
+            const access_token = await AsyncStorage.getItem('@access_token')
+            const { data } = await axios.delete(`https://m2m-api.herokuapp.com/matches/${detailData.id}/leave`,
+                {
+                    headers: {
+                        access_token: access_token
+                    }
+                })
+            fetchDetail()
+            navigation.goBack()
+        } catch (error) {
+            console.log(error.response.data.message);
+        }
+    }
+
     useEffect(() => {
         fetchDetail()
         getLocalStorage()
@@ -145,7 +161,7 @@ export default function MatchDetail({ route, navigation }) {
             <Button
                 title={'Leave Match'}
                 color='error'
-                // onPress={}
+                onPress={()=>leaveMatch()}
                 buttonStyle={{
                     borderRadius: 25
                 }}

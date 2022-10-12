@@ -45,9 +45,9 @@ export default function Home({ navigation }) {
         } else {
             setFilterMatches(matches)
         }
-    }, [category])
+    }, [category, matches])
 
-    if (!matches, matches) {
+    if (!matches) {
         return (
             <ActivityIndicator size='large' color='#ADD6FF' />
         )
