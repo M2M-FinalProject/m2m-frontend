@@ -35,16 +35,6 @@ export default function MyMatch({ navigation }) {
         }, [])
     )
 
-    // useEffect(() => {
-    //     fetchMatchData()
-    // }, [])
-
-    if (!matchData) {
-        return (
-            <ActivityIndicator size='large' color='#ADD6FF' />
-        )
-    }
-
     const renderItem = ({ item }) => {
         return (
             <MatchCard match={item} navigation={navigation} />
@@ -57,8 +47,16 @@ export default function MyMatch({ navigation }) {
             flex: 1
         }}>
             {loading &&
-              <ActivityIndicator size="large" color="#000000" style={{left: 0, top:0, right: 0, bottom: 0, justifyContent:"center", alignItems: "center", position: "absolute", zIndex: 3}}/>
-            }
+                <View
+              style={{ 
+                width: '100%',
+                height: '100%',
+                position: "absolute",
+                zIndex: 9,
+                backgroundColor: 'rgba(255,255,255,0.9)',
+              }}>
+                  <ActivityIndicator size="large" color="#000000" style={{left: 0, top:0, right: 0, bottom: 0, justifyContent:"center", alignItems: "center", position: "absolute", zIndex: 10}}/>
+              </View>            }
             <View style={{
                 backgroundColor: "#FD841F",
                 height: "20%",

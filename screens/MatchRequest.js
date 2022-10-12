@@ -48,7 +48,8 @@ export default function MatchRequest({ route }) {
                 requestData.length === 0 &&
                 <View
                     style={{
-                        marginTop: 40
+                        marginTop: 40,
+                        alignSelf: 'center'
                     }}
                 >
                     <Text>There is no request for your match</Text>
