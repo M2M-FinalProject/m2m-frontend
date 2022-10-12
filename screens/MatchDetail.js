@@ -1,7 +1,8 @@
 import { Button, Text } from "@rneui/base"
 import { View, Image, ActivityIndicator } from "react-native"
 import axios from 'axios'
-import { useState, useEffect } from 'react'
+import { useFocusEffect } from "@react-navigation/native"
+import { useState, useEffect, useCallback } from 'react'
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 
@@ -70,10 +71,18 @@ export default function MatchDetail({ route, navigation }) {
         }
     }
 
-    useEffect(() => {
-        fetchDetail()
-        getLocalStorage()
-    }, [])
+
+    useFocusEffect(
+        useCallback(() => {
+            fetchDetail()
+            getLocalStorage()
+        }, [])
+    )
+
+    // useEffect(() => {
+    //     fetchDetail()
+    //     getLocalStorage()
+    // }, [])
 
     function toRequest() {
         navigation.navigate('MatchRequest', {
@@ -109,8 +118,8 @@ export default function MatchDetail({ route, navigation }) {
                 title={'Show Chat'}
                 onPress={() => navigation.navigate('ChatComponent', {
                     id: detailData.id,
-                    userId : userId,
-                    name : accName
+                    userId: userId,
+                    name: accName
                 })}
                 buttonStyle={{
                     borderRadius: 25
@@ -147,8 +156,8 @@ export default function MatchDetail({ route, navigation }) {
                 title={'Show Chat'}
                 onPress={() => navigation.navigate('ChatComponent', {
                     id: detailData.id,
-                    userId : userId,
-                    name : accName
+                    userId: userId,
+                    name: accName
                 })}
                 buttonStyle={{
                     borderRadius: 25
@@ -161,7 +170,7 @@ export default function MatchDetail({ route, navigation }) {
             <Button
                 title={'Leave Match'}
                 color='error'
-                onPress={()=>leaveMatch()}
+                onPress={() => leaveMatch()}
                 buttonStyle={{
                     borderRadius: 25
                 }}

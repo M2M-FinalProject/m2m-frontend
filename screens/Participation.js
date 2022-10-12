@@ -1,5 +1,7 @@
 import { View, Text, ActivityIndicator } from 'react-native'
 import { ButtonGroup } from '@rneui/themed'
+import { useState, useCallback } from 'react';
+import { useFocusEffect } from '@react-navigation/native';
 import axios from 'axios';
 import { useEffect,useState } from 'react'
 import MatchCard from '../components/MatchCard'
@@ -53,13 +55,23 @@ export default function Participation({ navigation }) {
         }
     }
 
-    useEffect(() => {
-        if (selectedIndex == 0) {
+    // useEffect(() => {
+    //     if (selectedIndex == 0) {
+    //         fetchMatchApproved()
+    //     } else {
+    //         fetchMatchPending()
+    //     }
+    // }, [selectedIndex])
+
+    useFocusEffect(
+        useCallback(() => {
+            if (selectedIndex == 0) {
             fetchMatchApproved()
         } else {
             fetchMatchPending()
         }
-    }, [selectedIndex])
+        }, [selectedIndex])
+    )
 
     if (!matchData) {
         return (

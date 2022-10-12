@@ -1,8 +1,9 @@
 import { ActivityIndicator, View, Text, TextInput, ScrollView, FlatList, StyleSheet } from 'react-native'
+import { useFocusEffect } from '@react-navigation/native'
 import { Chip } from '@rneui/themed'
 import { useSelector, useDispatch } from 'react-redux'
 import { fetchMatches } from '../store/actions/matchAction'
-import { useEffect, useState } from 'react'
+import { useEffect, useState, useCallback } from 'react'
 import MatchCard from '../components/MatchCard'
 import axios from 'axios'
 import AsyncStorage from '@react-native-async-storage/async-storage'
@@ -38,12 +39,14 @@ export default function Home({ navigation }) {
         }
     }
 
-    useEffect(() => {
-        dispatch(fetchMatches())
-        fetchChips()
-    }, [])
+    useFocusEffect(
+        useCallback(() => {
+            dispatch(fetchMatches())
+            fetchChips()
+        }, [])
+    )
 
-    useEffect(()=>{
+    useEffect(() => {
         if (category != 'All') {
             setFilterMatches(matches.filter(el => el.CategoryId == category))
         } else {
@@ -211,7 +214,7 @@ export default function Home({ navigation }) {
                                 { marginRight: 10 },
                                 category != 'All' ? styles.border : ''
                             ]}
-                        titleStyle={category != 'All' ? styles.text : '' }
+                        titleStyle={category != 'All' ? styles.text : ''}
                     />
                     {chips.map(element => {
                         return (
@@ -225,7 +228,7 @@ export default function Home({ navigation }) {
                                         { marginRight: 10 },
                                         element.id != category ? styles.border : ''
                                     ]}
-                                titleStyle={element.id != category ? styles.text : '' }
+                                titleStyle={element.id != category ? styles.text : ''}
                             />
                         )
                     })}
