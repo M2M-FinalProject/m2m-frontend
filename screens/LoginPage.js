@@ -12,10 +12,11 @@ export default function LoginPage({navigation}){
     const [password, setPassword]= React.useState('')
     const [error, setError]= useState('')
 
-    const storeData = async (token, id) => {
+    const storeData = async (token, id, name) => {
         try {
           await AsyncStorage.setItem('@access_token', token)
           await AsyncStorage.setItem('@id', id.toString())
+          await AsyncStorage.setItem('@name', name)
         } catch (e) {
           // saving error
           console.log(e);
@@ -45,7 +46,7 @@ export default function LoginPage({navigation}){
                     message: data.message
                 }
             }
-            storeData(data.access_token, data.id )
+            storeData(data.access_token, data.id, data.name )
             navigation.navigate('HomeNavigator')
         })
         .catch((err)=>{
