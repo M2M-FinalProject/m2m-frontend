@@ -1,4 +1,4 @@
-import { View, Text } from 'react-native'
+import {View, Text, ActivityIndicator} from 'react-native'
 import { FlatList } from 'react-native'
 import axios from 'axios'
 import { useFocusEffect } from '@react-navigation/native'
@@ -8,10 +8,11 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 
 export default function MyMatch({ navigation }) {
     const [matchData, setMatchData] = useState([])
-    
+    const [loading, setLoading] = useState(false);
 
     async function fetchMatchData() {
         try {
+            setLoading(true);
             const id = await AsyncStorage.getItem('@id')
             const access_token = await AsyncStorage.getItem('@access_token')
             const { data } = await axios.get('https://m2m-api.herokuapp.com/matches?userId=' + id,
@@ -23,6 +24,8 @@ export default function MyMatch({ navigation }) {
             setMatchData(data)
         } catch (error) {
             console.log(error);
+        } finally {
+            setLoading(false);
         }
     }
 
@@ -53,6 +56,9 @@ export default function MyMatch({ navigation }) {
             backgroundColor: "#FFF",
             flex: 1
         }}>
+            {loading &&
+              <ActivityIndicator size="large" color="#000000" style={{left: 0, top:0, right: 0, bottom: 0, justifyContent:"center", alignItems: "center", position: "absolute", zIndex: 3}}/>
+            }
             <View style={{
                 backgroundColor: "#FD841F",
                 height: "20%",
