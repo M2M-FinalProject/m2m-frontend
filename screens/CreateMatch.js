@@ -8,6 +8,8 @@ import React from "react";
 import DateTimePicker from '@react-native-community/datetimepicker';
 // import CheckBox from '@react-native-community/checkbox';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { useDispatch } from 'react-redux'
+import { fetchMatches } from '../store/actions/matchAction'
 
 export default function CreateMatch({navigation}){
     let token = ''
@@ -31,7 +33,8 @@ export default function CreateMatch({navigation}){
     // const [toggleCheckBox, setToggleCheckBox] = useState(false)
     const [matchName, setMatchName]= React.useState('')
     const [capacity, setCapacity]= React.useState(1)
-    const [duration, setDuration]= React.useState('')
+    // const [duration, setDuration]= React.useState('')
+    const [duration, setDuration]= useState()
     const [desc, setDesc]= React.useState('')
     const [selectedLocation, setSelectedLocation] = useState();
     const [selectedCategory, setSelectedCategory] = useState();
@@ -44,6 +47,7 @@ export default function CreateMatch({navigation}){
         setShow(false)
         setDateDisplay(currentDate.toDateString())
      };
+    const dispatch = useDispatch()
     // const [selectedDate, setSelectedDate] = useState();
     // const [selectedMonth, setSelectedMonth] = useState();
     // const [selectedYear, setSelectedYear] = useState();
@@ -64,11 +68,24 @@ export default function CreateMatch({navigation}){
             setError('Please Fill all the require inputs')
             return
         } else if (action == 'Check Field Recommendation'){
+            let name= matchName
+            let location = selectedLocation
+            let date = matchdate
+            let CategoryId = selectedCategory
+            let cap = capacity
+            let dur = duration
+            let description = desc
             console.log('masuk');
-            navigation.navigate('SelectField', {name:matchName, location: selectedLocation, date: matchdate, CategoryId: selectedCategory, capacity: capacity, duration: duration, type:1, description: desc})
-        } else{
-
-        
+            setError('')
+            setCapacity(1)
+            setDesc('')
+            setDuration('Set Duration')
+            setSelectedLocation('Select Location')
+            setSelectedCategory('Select Category')
+            setMatchDate(new Date())
+            setMatchName('')
+            navigation.navigate('SelectField', {name, location, date, CategoryId, capacity: cap, duration: dur, type:1, description})
+        } else {
             // console.log(token, 'ini token');
             return fetch('https://m2m-api.herokuapp.com/matches', {
             method: 'POST',
@@ -96,6 +113,15 @@ export default function CreateMatch({navigation}){
             })
             .then((data)=>{
                 console.log(data);
+                setError('')
+                setCapacity(1)
+                setDesc('')
+                setDuration('Set Duration')
+                setSelectedLocation('Select Location')
+                setSelectedCategory('Select Category')
+                setMatchDate(new Date())
+                setMatchName('')
+                dispatch(fetchMatches())
                 navigation.navigate('Home')
             })
             .catch((err)=>{
@@ -120,24 +146,27 @@ export default function CreateMatch({navigation}){
                     <TextInput style={styles.input}placeholder="SET THE MATCH NAME" 
                     value={matchName}
                     onChangeText={setMatchName}  />
-
+                    <View style={styles.inputPicker}>
                     <Picker
                         selectedValue={selectedLocation}
-                        style={styles.input}
+                        
                         onValueChange={(itemValue, itemIndex) => setSelectedLocation(itemValue)}
                     >
-                        <Picker.Item label="Select Location" value="0" />
+                        <Picker.Item style={{color:'#a3a3a3'}}label="Select Location" value="0" />
+                        <Picker.Item label="Jakarta Pusat" value="Jakarta Pusat" />
                         <Picker.Item label="Jakarta Selatan" value="Jakarta Selatan" />
                         <Picker.Item label="Jakarta Utara" value="Jakarta Utara" />
                         <Picker.Item label="Jakarta Timur" value="Jakarta Timur" />
                         <Picker.Item label="Jakarta Barat" value="Jakarta Barat" />
                     </Picker>
+                    </View>
+                    <View style={styles.inputPicker}>
                     <Picker
                         selectedValue={selectedCategory}
-                        style={styles.input}
+                        
                         onValueChange={(itemValue, itemIndex) => setSelectedCategory(itemValue)}
                     >
-                        <Picker.Item label="Select Category" value="0" />
+                        <Picker.Item style={{color:'#a3a3a3'}}label="Select Category" value="0" />
                         <Picker.Item label="Futsal" value="1" />
                         <Picker.Item label="Basketball" value="2" />
                         <Picker.Item label="Tennis" value="3" />
@@ -147,6 +176,7 @@ export default function CreateMatch({navigation}){
                         <Picker.Item label="Volleyball" value="7" />
                         
                     </Picker>
+                    </View>
                     <TouchableOpacity><Text style={styles.input} onPress={()=>setShow(true)}>{dateDisplay}</Text></TouchableOpacity>
                     {isDisplayDate &&(<DateTimePicker testID="dateTimePicker" value={matchdate} is24Hour={true} display="default" onChange={changeSelectedDate} />)}
                     
@@ -155,17 +185,33 @@ export default function CreateMatch({navigation}){
                     value={capacity}
                     onChangeText={setCapacity} keyboardType="numeric" />
 
-                    <TextInput style={styles.input}placeholder="SET MATCH DURATION" 
+                    {/* <TextInput style={styles.input}placeholder="SET MATCH DURATION" 
                     value={duration}
-                    onChangeText={setDuration}  />
+                    onChangeText={setDuration}  /> */}
+
+                    <View style={styles.inputPicker}>
+                    <Picker
+                        selectedValue={duration}
+                        
+                        onValueChange={(itemValue, itemIndex) => setDuration(itemValue)}
+                    >
+                        <Picker.Item style={{color:'#a3a3a3'}}label="Set Duration" value="0" />
+                        <Picker.Item label="30 Minutes" value="30 Minutes" />
+                        <Picker.Item label="60 Minutes" value="60 Minutes" />
+                        <Picker.Item label="90 Minutes" value="90 Minutes" />
+                        <Picker.Item label="120 Minutes" value="120 Minutes" />
+                        <Picker.Item label="More than 120 Minutes" value="More than 120 Minutes" />
+                        
+                    </Picker>
+                    </View>
 
                     <TextInput style={styles.input}placeholder="DESCRIBE MORE" 
                     value={desc}
                     onChangeText={setDesc}  />
-
+                    <View style={styles.inputPicker}>
                     <Picker
                         selectedValue={fieldRequirement}
-                        style={styles.input}
+                        
                         onValueChange={(itemValue, itemIndex) => {
                             setFieldRequirement(itemValue)
                             changeButton()
@@ -175,6 +221,7 @@ export default function CreateMatch({navigation}){
                         <Picker.Item label="I don't need Field Recomendation" value="1" />
                         
                     </Picker>
+                    </View>
                     <View style={styles.primaryButton}>
                         <TouchableOpacity onPress={buttonClick}>
                             <Text style={styles.primaryText}>{action}</Text>
@@ -212,6 +259,15 @@ const styles = StyleSheet.create({
         padding: 10,
         borderColor: '#fff',
         backgroundColor: '#FFF',
+        borderRadius:10
+    },
+    inputPicker: {
+        height: 50,
+        marginVertical: 12,
+        borderWidth: 1,
+        borderColor: '#fff',
+        backgroundColor: '#FFF',
+        borderRadius:10
     },
     errWarn: {
         fontSize: 25,

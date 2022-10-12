@@ -5,7 +5,7 @@ import {
 import FieldCard from '../components/FieldCard'
 import { useEffect, useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux'
-import { fetchFields } from '../store/actions/matchAction';
+import { fetchFields, fetchMatches } from '../store/actions/matchAction';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 export default function SelectField({ navigation, route }){
@@ -51,9 +51,9 @@ export default function SelectField({ navigation, route }){
         )
     }
     
-    function fieldSelect(e){
+    // function fieldSelect(e){
         
-    }
+    // }
 
     const renderItem = ({item}) => {
         return (
@@ -82,6 +82,7 @@ export default function SelectField({ navigation, route }){
                     })
                     .then((data)=>{
                         console.log(data);
+                        dispatch(fetchMatches())
                         navigation.navigate('Home')
                     })
                     .catch((err)=>{
