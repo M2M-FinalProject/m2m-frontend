@@ -4,7 +4,7 @@ import { useState, useCallback } from 'react';
 import { useFocusEffect } from '@react-navigation/native';
 import axios from 'axios';
 import MatchCard from '../components/MatchCard'
-import { FlatList } from 'react-native';
+import { FlatList, Alert } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 
@@ -15,6 +15,22 @@ export default function Participation({ navigation }) {
     const [loading, setLoading] = useState(false);
 
     const [matchData, setMatchData] = useState([])
+
+    const showAlert = (message) =>
+        Alert.alert(
+            "Error",
+            message,
+            [
+                {
+                    text: "Cancel",
+                    onPress: () => console.log("Cancel Pressed"),
+                    style: "cancel"
+                },
+                {
+                    text: "OK", onPress: () => {}
+                }
+            ]
+        );
 
     async function fetchMatchApproved() {
         try {
@@ -29,7 +45,8 @@ export default function Participation({ navigation }) {
                 })
             setMatchData(data)
         } catch (error) {
-            console.log(error);
+            let errorMessage = error.response.data.message ?? 'Error making netwirk request, please check your internet connection'
+            showAlert(errorMessage)
         }finally {
             setLoading(false);
         }
@@ -48,7 +65,8 @@ export default function Participation({ navigation }) {
                 })
             setMatchData(data)
         } catch (error) {
-            console.log(error);
+            let errorMessage = error.response.data.message ?? 'Error making netwirk request, please check your internet connection'
+            showAlert(errorMessage)
         }finally {
             setLoading(false)
         }

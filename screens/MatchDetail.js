@@ -1,5 +1,5 @@
 import { Button, Text } from "@rneui/base"
-import { View, Image, ActivityIndicator } from "react-native"
+import { View, Image, ActivityIndicatorm, Alert } from "react-native"
 import axios from 'axios'
 import { useFocusEffect } from "@react-navigation/native"
 import { useState, useEffect, useCallback } from 'react'
@@ -28,7 +28,8 @@ export default function MatchDetail({ route, navigation }) {
                 })
             setDetailData(data)
         } catch (error) {
-            console.log(error);
+            let errorMessage = error.response.data.message ?? 'Error making netwirk request, please check your internet connection'
+            showAlert(errorMessage)
         }finally {
             setLoading(false);
         }
@@ -59,7 +60,8 @@ export default function MatchDetail({ route, navigation }) {
                 })
             fetchDetail()
         } catch (error) {
-            console.log(error.response.data.message);
+            let errorMessage = error.response.data.message ?? 'Error making netwirk request, please check your internet connection'
+            showAlert(errorMessage)
         }finally{
             setLoading(false);
         }
@@ -78,7 +80,8 @@ export default function MatchDetail({ route, navigation }) {
             fetchDetail()
             navigation.goBack()
         } catch (error) {
-            console.log(error.response.data.message);
+            let errorMessage = error.response.data.message ?? 'Error making netwirk request, please check your internet connection'
+            showAlert(errorMessage)
         } finally{
             setLoading(false);
         }
@@ -92,10 +95,21 @@ export default function MatchDetail({ route, navigation }) {
         }, [])
     )
 
-    // useEffect(() => {
-    //     fetchDetail()
-    //     getLocalStorage()
-    // }, [])
+    const showAlert = (message) =>
+        Alert.alert(
+            "Error",
+            message,
+            [
+                {
+                    text: "Cancel",
+                    onPress: () => console.log("Cancel Pressed"),
+                    style: "cancel"
+                },
+                {
+                    text: "OK", onPress: () => {}
+                }
+            ]
+        );
 
     function toRequest() {
         navigation.navigate('MatchRequest', {

@@ -1,4 +1,4 @@
-import { Text, View, FlatList, ActivityIndicator } from 'react-native'
+import { Text, View, FlatList, ActivityIndicator, Alert } from 'react-native'
 import UserCard from '../components/UserCard'
 import axios from 'axios'
 import { useState, useEffect } from 'react'
@@ -8,6 +8,22 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 export default function MatchRequest({ route }) {
     const [requestData, setRequestData] = useState([])
     const [loading, setLoading] = useState(false);
+
+    const showAlert = (message) =>
+        Alert.alert(
+            "Error",
+            message,
+            [
+                {
+                    text: "Cancel",
+                    onPress: () => console.log("Cancel Pressed"),
+                    style: "cancel"
+                },
+                {
+                    text: "OK", onPress: () => {}
+                }
+            ]
+        );
 
     async function fetchMatchRequest() {
         try {
@@ -21,7 +37,8 @@ export default function MatchRequest({ route }) {
                 })
             setRequestData(data)
         } catch (error) {
-            console.log(error);
+            let errorMessage = error.response.data.message ?? 'Error making netwirk request, please check your internet connection'
+            showAlert(errorMessage)
         } finally {
             setLoading(false);
         }
