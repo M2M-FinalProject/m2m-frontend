@@ -1,8 +1,7 @@
 import { View, Text, ActivityIndicator } from 'react-native'
 import { ButtonGroup } from '@rneui/themed'
-import { useState } from 'react';
 import axios from 'axios';
-import { useEffect } from 'react'
+import { useEffect,useState } from 'react'
 import MatchCard from '../components/MatchCard'
 import { FlatList } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
@@ -12,11 +11,13 @@ export default function Participation({ navigation }) {
     const [selectedIndex, setSelectedIndex] = useState(0)
     const [userId, setUserId] = useState('')
     const [accToken, setAccToken] = useState('')
+    const [loading, setLoading] = useState(false);
 
     const [matchData, setMatchData] = useState([])
 
     async function fetchMatchApproved() {
         try {
+            setLoading(true);
             const access_token = await AsyncStorage.getItem('@access_token')
             const id = await AsyncStorage.getItem('@id')
             const { data } = await axios.get(`https://m2m-api.herokuapp.com/matches?userId=${id}&status=1`,
@@ -28,11 +29,14 @@ export default function Participation({ navigation }) {
             setMatchData(data)
         } catch (error) {
             console.log(error);
+        }finally {
+            setLoading(false);
         }
     }
 
     async function fetchMatchPending() {
         try {
+            setLoading(true);
             const access_token = await AsyncStorage.getItem('@access_token')
             const id = await AsyncStorage.getItem('@id')
             const { data } = await axios.get(`https://m2m-api.herokuapp.com/matches?userId=${id}&status=0`,
@@ -44,6 +48,8 @@ export default function Participation({ navigation }) {
             setMatchData(data)
         } catch (error) {
             console.log(error);
+        }finally {
+            setLoading(false)
         }
     }
 
@@ -73,6 +79,9 @@ export default function Participation({ navigation }) {
             backgroundColor: "#FFF",
             flex: 1
         }}>
+            {loading &&
+              <ActivityIndicator size="large" color="#000000" style={{left: 0, top:0, right: 0, bottom: 0, justifyContent:"center", alignItems: "center", position: "absolute", zIndex: 3}}/>
+            }
             <View style={{
                 backgroundColor: "#FD841F",
                 height: "20%",
