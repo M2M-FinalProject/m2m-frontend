@@ -1,10 +1,11 @@
 import { Text, View, Image, Pressable, TouchableOpacity } from "react-native";
+import { useNavigation } from '@react-navigation/native';
 
-export default function MatchCard({ match, navigation }) {
+export default function MatchCard({ match }) {
+    const navigation = useNavigation();
     function goToDetail() {
         navigation.navigate('MatchDetail', {
             id: match.id,
-            navigation: navigation
         })
     }
     return (
