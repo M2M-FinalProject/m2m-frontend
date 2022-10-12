@@ -16,11 +16,6 @@ export default function MyMatch({ navigation }) {
             message,
             [
                 {
-                    text: "Cancel",
-                    onPress: () => console.log("Cancel Pressed"),
-                    style: "cancel"
-                },
-                {
                     text: "OK", onPress: () => {}
                 }
             ]
@@ -39,7 +34,7 @@ export default function MyMatch({ navigation }) {
                 })
             setMatchData(data)
         } catch (error) {
-            let errorMessage = error.response.data.message ?? 'Error making netwirk request, please check your internet connection'
+            let errorMessage = error.response.data.message ?? 'Error making network request, please check your internet connection'
             showAlert(errorMessage)
         } finally {
             setLoading(false);

@@ -28,7 +28,7 @@ export default function MatchDetail({ route, navigation }) {
                 })
             setDetailData(data)
         } catch (error) {
-            let errorMessage = error.response.data.message ?? 'Error making netwirk request, please check your internet connection'
+            let errorMessage = error.response.data.message ?? 'Error making network request, please check your internet connection'
             showAlert(errorMessage)
         }finally {
             setLoading(false);
@@ -60,7 +60,7 @@ export default function MatchDetail({ route, navigation }) {
                 })
             fetchDetail()
         } catch (error) {
-            let errorMessage = error.response.data.message ?? 'Error making netwirk request, please check your internet connection'
+            let errorMessage = error.response.data.message ?? 'Error making network request, please check your internet connection'
             showAlert(errorMessage)
         }finally{
             setLoading(false);
@@ -80,7 +80,7 @@ export default function MatchDetail({ route, navigation }) {
             fetchDetail()
             navigation.goBack()
         } catch (error) {
-            let errorMessage = error.response.data.message ?? 'Error making netwirk request, please check your internet connection'
+            let errorMessage = error.response.data.message ?? 'Error making network request, please check your internet connection'
             showAlert(errorMessage)
         } finally{
             setLoading(false);
@@ -100,11 +100,6 @@ export default function MatchDetail({ route, navigation }) {
             "Error",
             message,
             [
-                {
-                    text: "Cancel",
-                    onPress: () => console.log("Cancel Pressed"),
-                    style: "cancel"
-                },
                 {
                     text: "OK", onPress: () => {}
                 }
