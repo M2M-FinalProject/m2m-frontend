@@ -47,7 +47,7 @@ export default function Home({ navigation }) {
         }
     }, [category])
 
-    if (!matches) {
+    if (!matches, matches) {
         return (
             <ActivityIndicator size='large' color='#ADD6FF' />
         )
