@@ -14,9 +14,11 @@ export default function MatchDetail({ route, navigation }) {
     const [userId, setUserId] = useState('')
     const [accToken, setAccToken] = useState('')
     const [accName, setAccName] = useState('')
+    const [loading, setLoading] = useState(false);
 
     async function fetchDetail() {
         try {
+            setLoading(true);
             const access_token = await AsyncStorage.getItem('@access_token')
             const { data } = await axios.get('https://m2m-api.herokuapp.com/matches/' + route.params.id,
                 {
@@ -27,6 +29,8 @@ export default function MatchDetail({ route, navigation }) {
             setDetailData(data)
         } catch (error) {
             console.log(error);
+        }finally {
+            setLoading(false);
         }
     }
 
@@ -45,6 +49,7 @@ export default function MatchDetail({ route, navigation }) {
 
     async function joinMatch() {
         try {
+            setLoading(true);
             const access_token = await AsyncStorage.getItem('@access_token')
             const { data } = await axios.post(`https://m2m-api.herokuapp.com/matches/${detailData.id}/join`, null,
                 {
@@ -55,11 +60,14 @@ export default function MatchDetail({ route, navigation }) {
             fetchDetail()
         } catch (error) {
             console.log(error.response.data.message);
+        }finally{
+            setLoading(false);
         }
     }
 
     async function leaveMatch() {
         try {
+            setLoading(true);
             const access_token = await AsyncStorage.getItem('@access_token')
             const { data } = await axios.delete(`https://m2m-api.herokuapp.com/matches/${detailData.id}/leave`,
                 {
@@ -71,6 +79,8 @@ export default function MatchDetail({ route, navigation }) {
             navigation.goBack()
         } catch (error) {
             console.log(error.response.data.message);
+        } finally{
+            setLoading(false);
         }
     }
 
@@ -213,6 +223,18 @@ export default function MatchDetail({ route, navigation }) {
                 flex: 1
             }}
         >
+            {loading &&
+              <View
+              style={{ 
+                width: '100%',
+                height: '100%',
+                position: "absolute",
+                zIndex: 9,
+                backgroundColor: 'rgba(255,255,255,0.9)',
+              }}>
+                  <ActivityIndicator size="large" color="#000000" style={{left: 0, top:0, right: 0, bottom: 0, justifyContent:"center", alignItems: "center", position: "absolute", zIndex: 10}}/>
+              </View>
+            }
             <View
                 style={{
                     flex: 4,
