@@ -23,11 +23,11 @@ const Stack = createNativeStackNavigator()
 
 function HomeNavigator() {
   return (
-    <Tab.Navigator >
+    <Tab.Navigator screenOptions={{ headerShown: false, headerStyle: { backgroundColor: '#FAF9FA' } }}>
       <Tab.Screen name='Home' component={Home} />
+      <Tab.Screen name='CreateMatch' component={CreateMatch} />
       <Tab.Screen name='MyMatch' component={MyMatch} />
       <Tab.Screen name='Participation' component={Participation} />
-      <Tab.Screen name='CreateMatch' component={CreateMatch} />
     </Tab.Navigator>
   )
 }
