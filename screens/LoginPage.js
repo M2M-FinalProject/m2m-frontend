@@ -1,4 +1,4 @@
-import { StyleSheet, Text, View, Image, Dimensions, ScrollView, FlatList, TouchableOpacity, TextInput  } from 'react-native';
+import { StyleSheet, Text, View, Image, Dimensions, ScrollView, FlatList, TouchableOpacity, TextInput, ActivityIndicator  } from 'react-native';
 import {
   SafeAreaView,
 } from 'react-native-safe-area-context';
@@ -11,6 +11,7 @@ export default function LoginPage({navigation}){
     const [email, setEmail]= React.useState('')
     const [password, setPassword]= React.useState('')
     const [error, setError]= useState('')
+    const [loading, setLoading] = useState(false);
 
     const storeData = async (token, id, name) => {
         try {
@@ -24,6 +25,7 @@ export default function LoginPage({navigation}){
     }
     function logingIn(e){
         e.preventDefault()
+        setLoading(true);
         // console.log(email, password);
         return fetch('https://m2m-api.herokuapp.com/login', {
         method: 'POST',
@@ -46,6 +48,7 @@ export default function LoginPage({navigation}){
                     message: data.message
                 }
             }
+            clearForm()
             storeData(data.access_token, data.id, data.name )
             navigation.navigate('HomeNavigator')
         })
@@ -53,18 +56,28 @@ export default function LoginPage({navigation}){
             console.log(err);
             setError(err.message)
         })
-        
-        
+        .finally(() => {
+          setLoading(false);
+        })
     }
+
+    function clearForm(){
+        setEmail('');
+        setPassword('');
+    }
+
     return(
         <SafeAreaView style={styles.container}>
-            <StatusBar 
-            style="light" 
+          {loading &&
+              <ActivityIndicator size="large" color="#000000" style={{left: 0, top:0, right: 0, bottom: 0, justifyContent:"center", alignItems: "center", position: "absolute", zIndex: 3}}/>
+          }
+          <StatusBar
+            style="light"
             backgroundColor="#FD841F" />
             <View style={styles.container}>
                 <View style={styles.header}>
                     <Text style={styles.headerText}>WELCOME </Text>
-                    <Text style={styles.headerButSmaller}>BACK</Text> 
+                    <Text style={styles.headerButSmaller}>BACK</Text>
                 </View>
                 <View style={styles.inputForm}>
                     <Text style={styles.errWarn}>{error}</Text>
@@ -72,17 +85,17 @@ export default function LoginPage({navigation}){
                     onChangeText={setEmail} />
                     <TextInput style={styles.input}placeholder="PASSWORD" value={password}
                     onChangeText={setPassword} secureTextEntry={true} />
-                    
+
                     <View style={styles.primaryButton}>
                         <TouchableOpacity onPress={logingIn}>
                         <Text style={styles.primaryText}>LOGIN</Text></TouchableOpacity>
                     </View>
 
                 </View>
-                
+
             </View>
         </SafeAreaView>
-    )
+    );
 }
 
 const styles = StyleSheet.create({
@@ -151,5 +164,14 @@ const styles = StyleSheet.create({
         width: 110,
         resizeMode:'stretch'
     },
+    loading: {
+      position: 'absolute',
+      left: 0,
+      right: 0,
+      top: 0,
+      bottom: 0,
+      alignItems: 'center',
+      justifyContent: 'center'
+    }
 
 })
