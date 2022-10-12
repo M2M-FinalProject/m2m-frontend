@@ -59,10 +59,6 @@ export default function UserCard({ request, fetchMatchRequest }) {
                 marginTop: 10,
             }}
         >
-            <Image
-                source={{ uri: 'https://sportal.blic.rs/storage/images/2022/10/05/21:15:51_2022100521150407925_original_am-l.jpeg' }}
-                style={{ width: 40, height: 70 }}
-            />
 
             <View
                 style={{

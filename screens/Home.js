@@ -45,7 +45,7 @@ export default function Home({ navigation }) {
         } else {
             setFilterMatches(matches)
         }
-    }, [category])
+    }, [category, matches])
 
     if (!matches) {
         return (
