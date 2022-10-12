@@ -74,29 +74,21 @@ export default function RegisterPage({navigation}){
                     <Text style={styles.headerText}>NICE, </Text>
                     <Text style={styles.headerButSmaller}>NOW SETUP UR PROFILE</Text> 
                 </View>
+                <ScrollView>
                 <View style={styles.inputForm}>
                     <Text style={styles.errWarn}>{typeWrong}</Text>
                     <TextInput style={styles.input}placeholder="YOUR NAME" 
                     value={name}
-                    onChangeText={setName} placeholderTextColor="#E14D2A" />
-                    {/* <TextInput style={styles.input}placeholder="SELECT GENDER" placeholderTextColor="#E14D2A"/> */}
-                    {/* <Picker
-                        selectedValue={selectedGender}
-                        style={styles.input}
-                        onValueChange={(itemValue, itemIndex) => setSelectedGender(itemValue)}
-                    >
-                        <Picker.Item label="Male" value="male" />
-                        <Picker.Item label="Female" value="female" />
-                    </Picker> */}
+                    onChangeText={setName}  />
                     <TextInput style={styles.input}placeholder="EMAIL" value={email}
-                    onChangeText={setEmail} placeholderTextColor="#E14D2A"/>
+                    onChangeText={setEmail} />
                     <TextInput style={styles.input}placeholder="PASSWORD" value={password}
-                    onChangeText={setPassword}  secureTextEntry={true} placeholderTextColor="#E14D2A"/>
+                    onChangeText={setPassword}  secureTextEntry={true} />
                     <TextInput style={styles.input}placeholder="CONFIRM PASSWORD"
                     value={confirmPass}
-                    onChangeText={setConfirmation} secureTextEntry={true} placeholderTextColor="#E14D2A"/>
+                    onChangeText={setConfirmation} secureTextEntry={true} />
                     <TextInput style={styles.input} value={bio}
-                    onChangeText={setBio} placeholder="DESCRIBE YOUR SPORT ABILITY" placeholderTextColor="#E14D2A"/>
+                    onChangeText={setBio} placeholder="DESCRIBE YOUR SPORT ABILITY" />
                     
                     <View style={styles.primaryButton}>
                         <TouchableOpacity onPress={regisNewUser}>
@@ -105,7 +97,7 @@ export default function RegisterPage({navigation}){
                     </View>
 
                 </View>
-                
+                </ScrollView>
             </View>
         </SafeAreaView>
     )
@@ -123,7 +115,6 @@ const styles = StyleSheet.create({
         padding: 50
     },
     inputForm: {
-
         paddingHorizontal: 50,
         flex: 5,
         backgroundColor: '#FD841F',
@@ -133,9 +124,10 @@ const styles = StyleSheet.create({
         marginVertical: 12,
         borderWidth: 1,
         padding: 10,
-        borderColor: '#E14D2A',
-        backgroundColor: '#F6FFC1',
-        color:"#E14D2A"
+        borderColor: '#FFF',
+        backgroundColor: '#FFF',
+        color:"#E14D2A",
+        borderRadius:10
     },
     errWarn: {
         fontSize: 25,
@@ -145,13 +137,13 @@ const styles = StyleSheet.create({
     },
     headerText: {
         fontSize: 45,
-        color: '#F6FFC1',
+        color: '#FFF',
         fontFamily: 'Roboto',
         fontWeight: "900"
     },
     headerButSmaller: {
         fontSize: 22,
-        color: '#F6FFC1',
+        color: '#FFF',
         fontFamily: 'Roboto',
         fontWeight: "900"
     },

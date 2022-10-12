@@ -69,9 +69,9 @@ export default function LoginPage({navigation}){
                 <View style={styles.inputForm}>
                     <Text style={styles.errWarn}>{error}</Text>
                     <TextInput style={styles.input}placeholder="EMAIL" value={email}
-                    onChangeText={setEmail} placeholderTextColor="#E14D2A"/>
+                    onChangeText={setEmail} />
                     <TextInput style={styles.input}placeholder="PASSWORD" value={password}
-                    onChangeText={setPassword} secureTextEntry={true} placeholderTextColor="#E14D2A"/>
+                    onChangeText={setPassword} secureTextEntry={true} />
                     
                     <View style={styles.primaryButton}>
                         <TouchableOpacity onPress={logingIn}>
@@ -97,7 +97,6 @@ const styles = StyleSheet.create({
         padding: 50
     },
     inputForm: {
-
         paddingHorizontal: 50,
         flex: 5,
         backgroundColor: '#FD841F',
@@ -107,20 +106,19 @@ const styles = StyleSheet.create({
         marginVertical: 12,
         borderWidth: 1,
         padding: 10,
-        borderColor: '#E14D2A',
-        backgroundColor: '#F6FFC1'
+        borderColor: '#fff',
+        backgroundColor: '#FFF',
+        borderRadius:10
     },
-
-
     headerText: {
         fontSize: 45,
-        color: '#F6FFC1',
+        color: '#FFF',
         fontFamily: 'Roboto',
         fontWeight: "900"
     },
     headerButSmaller: {
         fontSize: 22,
-        color: '#F6FFC1',
+        color: '#FFF',
         fontFamily: 'Roboto',
         fontWeight: "900"
     },
