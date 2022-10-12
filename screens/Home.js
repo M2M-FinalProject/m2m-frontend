@@ -1,4 +1,4 @@
-import { ActivityIndicator, View, Text, TextInput, ScrollView, FlatList } from 'react-native'
+import { ActivityIndicator, View, Text, TextInput, ScrollView, FlatList, StyleSheet } from 'react-native'
 import { Chip } from '@rneui/themed'
 import { useSelector, useDispatch } from 'react-redux'
 import { fetchMatches } from '../store/actions/matchAction'
@@ -11,7 +11,12 @@ export default function Home({ navigation }) {
     const dispatch = useDispatch()
     const [chips, setChips] = useState([])
     const [text, setText] = useState('');
-    const [category, setCategory] = useState('');
+    const [category, setCategory] = useState('All');
+    const [filterMatches, setFilterMatches] = useState([]);
+
+    function changeCategory(categoryId) {
+        setCategory(categoryId)
+    }
 
     const { matches, error } = useSelector(state => {
         return state.matchReducer
@@ -32,7 +37,15 @@ export default function Home({ navigation }) {
     useEffect(() => {
         dispatch(fetchMatches())
         fetchChips()
-    }, [dispatch])
+    }, [])
+
+    useEffect(()=>{
+        if (category != 'All') {
+            setFilterMatches(matches.filter(el => el.CategoryId == category))
+        } else {
+            setFilterMatches(matches)
+        }
+    }, [category])
 
     if (!matches) {
         return (
@@ -176,35 +189,36 @@ export default function Home({ navigation }) {
                     style={{
                         width: "90%",
                         marginHorizontal: 20,
-                        flexDirection: 'row'
+                        flexDirection: 'row',
+                        marginBottom: 10
                     }}
                     contentContainerStyle={{ height: 40 }}
                 >
                     <Chip
-                        type='outline'
+                        type={category == 'All' ? 'solid' : 'outline'}
                         color={'#FD841F'}
                         title='All'
-                        buttonStyle={{
-                            marginRight: 10,
-                            borderColor: '#FD841F'
-                        }}
-                        titleStyle={{
-                            color: '#FD841F'
-                        }}
+                        onPress={() => changeCategory('All')}
+                        buttonStyle={
+                            [
+                                { marginRight: 10 },
+                                category != 'All' ? styles.border : ''
+                            ]}
+                        titleStyle={category != 'All' ? styles.text : '' }
                     />
                     {chips.map(element => {
                         return (
                             <Chip key={element.id}
-                                type='outline'
+                                onPress={() => changeCategory(element.id)}
+                                type={element.id == category ? 'solid' : 'outline'}
                                 color={'#FD841F'}
                                 title={element.name}
-                                buttonStyle={{
-                                    marginRight: 10,
-                                    borderColor: '#FD841F'
-                                }}
-                                titleStyle={{
-                                    color: '#FD841F'
-                                }}
+                                buttonStyle={
+                                    [
+                                        { marginRight: 10 },
+                                        element.id != category ? styles.border : ''
+                                    ]}
+                                titleStyle={element.id != category ? styles.text : '' }
                             />
                         )
                     })}
@@ -216,8 +230,7 @@ export default function Home({ navigation }) {
                 style={{ height: 400 }}
                 contentContainerStyle={{ justifyContent: 'center' }}
                 data={
-                    matches.filter(el => el.location.toLowerCase().includes(text.toLowerCase()))
-
+                    filterMatches?.filter(el => el.location.toLowerCase().includes(text.toLowerCase()))
                 }
                 renderItem={renderItem}
                 keyExtractor={(item, idx) => idx}
@@ -225,3 +238,12 @@ export default function Home({ navigation }) {
         </View>
     )
 }
+
+const styles = StyleSheet.create({
+    text: {
+        color: '#FD841F'
+    },
+    border: {
+        borderColor: '#FD841F'
+    }
+});

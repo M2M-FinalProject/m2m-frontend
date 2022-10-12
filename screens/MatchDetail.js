@@ -9,6 +9,7 @@ export default function MatchDetail({ route, navigation }) {
     const [detailData, setDetailData] = useState({})
     const [userId, setUserId] = useState('')
     const [accToken, setAccToken] = useState('')
+    const [accName, setAccName] = useState('')
 
     async function fetchDetail() {
         try {
@@ -29,8 +30,10 @@ export default function MatchDetail({ route, navigation }) {
         try {
             const id = await AsyncStorage.getItem('@id')
             const access_token = await AsyncStorage.getItem('@access_token')
+            const name = await AsyncStorage.getItem('@name')
             setUserId(id)
             setAccToken(access_token)
+            setAccName(name)
         } catch (error) {
             console.log(error);
         }
@@ -90,7 +93,8 @@ export default function MatchDetail({ route, navigation }) {
                 title={'Show Chat'}
                 onPress={() => navigation.navigate('ChatComponent', {
                     id: detailData.id,
-                    userId : userId
+                    userId : userId,
+                    name : accName
                 })}
                 buttonStyle={{
                     borderRadius: 25
@@ -127,7 +131,8 @@ export default function MatchDetail({ route, navigation }) {
                 title={'Show Chat'}
                 onPress={() => navigation.navigate('ChatComponent', {
                     id: detailData.id,
-                    userId : userId
+                    userId : userId,
+                    name : accName
                 })}
                 buttonStyle={{
                     borderRadius: 25
