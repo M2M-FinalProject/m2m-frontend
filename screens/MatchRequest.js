@@ -37,6 +37,26 @@ export default function MatchRequest({ route }) {
         )
     }
 
+    const emptyList = () => {
+        return (
+            <View
+                style={{
+                    marginTop: 150,
+                    alignSelf: 'center',
+                    marginHorizontal: 20
+                }}
+            >
+                <Text
+                    style={{
+                        fontSize: 20,
+                        fontWeight: "bold",
+                        color: "#FD841F",
+                    }}
+                >There is no join request at the moment.</Text>
+            </View>
+        )
+    }
+
     return (
         <View
             style={{
@@ -44,18 +64,6 @@ export default function MatchRequest({ route }) {
                 marginTop: 40
             }}
         >
-            {
-                requestData.length === 0 &&
-                <View
-                    style={{
-                        marginTop: 40,
-                        alignSelf: 'center'
-                    }}
-                >
-                    <Text>There is no request for your match</Text>
-                </View>
-            }
-
             {loading &&
                 <View
                     style={{
@@ -69,6 +77,7 @@ export default function MatchRequest({ route }) {
                 </View>}
             <FlatList
                 contentContainerStyle={{ justifyContent: 'center' }}
+                ListEmptyComponent={emptyList}
                 data={requestData} renderItem={renderItem} keyExtractor={(item, idx) => idx}
             />
         </View>

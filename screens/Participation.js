@@ -54,14 +54,6 @@ export default function Participation({ navigation }) {
         }
     }
 
-    // useEffect(() => {
-    //     if (selectedIndex == 0) {
-    //         fetchMatchApproved()
-    //     } else {
-    //         fetchMatchPending()
-    //     }
-    // }, [selectedIndex])
-
     useFocusEffect(
         useCallback(() => {
             if (selectedIndex == 0) {
@@ -72,9 +64,23 @@ export default function Participation({ navigation }) {
         }, [selectedIndex])
     )
 
-    if (!matchData) {
+    const emptyList = () => {
         return (
-            <ActivityIndicator size='large' color='#ADD6FF' />
+            <View
+                style={{
+                    marginTop: 70,
+                    alignSelf: 'center',
+                    marginHorizontal: 20
+                }}
+            >
+                <Text
+                    style={{
+                        fontSize: 20,
+                        fontWeight: "bold",
+                        color: "#FD841F",
+                    }}
+                >{selectedIndex == 0 ? 'There is no approved request' : 'There is no pending request'}</Text>
+            </View>
         )
     }
 
@@ -147,6 +153,7 @@ export default function Participation({ navigation }) {
             <FlatList
                 style={{ height: 400 }}
                 contentContainerStyle={{ justifyContent: 'center' }}
+                ListEmptyComponent={emptyList}
                 data={matchData} renderItem={renderItem} keyExtractor={(item, idx) => idx}
             />
         </View>

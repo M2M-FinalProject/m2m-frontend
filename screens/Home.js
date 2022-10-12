@@ -54,9 +54,23 @@ export default function Home({ navigation }) {
         }
     }, [category, matches])
 
-    if (!matches) {
+    const emptyList = () => {
         return (
-            <ActivityIndicator size='large' color='#ADD6FF' />
+            <View
+                style={{
+                    marginTop: 70,
+                    alignSelf: 'center',
+                    marginHorizontal: 20
+                }}
+            >
+                <Text
+                    style={{
+                        fontSize: 20,
+                        fontWeight: "bold",
+                        color: "#FD841F",
+                    }}
+                >Sorry, there is no match in this category yet.</Text>
+            </View>
         )
     }
 
@@ -194,6 +208,7 @@ export default function Home({ navigation }) {
             <FlatList
                 style={{ height: 400 }}
                 contentContainerStyle={{ justifyContent: 'center' }}
+                ListEmptyComponent={emptyList}
                 data={
                     filterMatches?.filter(el => el.location.toLowerCase().includes(text.toLowerCase()))
                 }

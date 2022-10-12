@@ -35,6 +35,26 @@ export default function MyMatch({ navigation }) {
         }, [])
     )
 
+    const emptyList = () => {
+        return (
+            <View
+                style={{
+                    marginTop: 70,
+                    alignSelf: 'center',
+                    marginHorizontal: 20
+                }}
+            >
+                <Text
+                    style={{
+                        fontSize: 20,
+                        fontWeight: "bold",
+                        color: "#FD841F",
+                    }}
+                >You have not created any match yet.</Text>
+            </View>
+        )
+    }
+
     const renderItem = ({ item }) => {
         return (
             <MatchCard match={item} navigation={navigation} />
@@ -83,6 +103,7 @@ export default function MyMatch({ navigation }) {
             <FlatList
                 style={{ height: 400 }}
                 contentContainerStyle={{ justifyContent: 'center' }}
+                ListEmptyComponent={emptyList}
                 data={matchData} renderItem={renderItem} keyExtractor={(item, idx) => idx}
             />
         </View>

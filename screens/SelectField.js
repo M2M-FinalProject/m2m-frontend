@@ -52,9 +52,25 @@ export default function SelectField({ navigation, route }){
         )
     }
 
-    // function fieldSelect(e){
-
-    // }
+    const emptyList = () => {
+        return (
+            <View
+                style={{
+                    marginTop: 150,
+                    alignSelf: 'center',
+                    marginHorizontal: 20
+                }}
+            >
+                <Text
+                    style={{
+                        fontSize: 20,
+                        fontWeight: "bold",
+                        color: "#FFF",
+                    }}
+                >Sorry, there is no available field for this sport category yet</Text>
+            </View>
+        )
+    }
 
     const renderItem = ({item}) => {
         return (
@@ -113,6 +129,7 @@ export default function SelectField({ navigation, route }){
               <FlatList
                   style={{display: 'flex'}}
                   contentContainerStyle={{ justifyContent: 'center' }}
+                  ListEmptyComponent={emptyList}
                   data={fields} renderItem={renderItem} keyExtractor={(item,idx) => idx}
               >
               </FlatList>
