@@ -1,4 +1,4 @@
-import {View, Text, ActivityIndicator} from 'react-native'
+import { View, Text, ActivityIndicator, Alert } from 'react-native'
 import { FlatList } from 'react-native'
 import axios from 'axios'
 import { useFocusEffect } from '@react-navigation/native'
@@ -9,6 +9,17 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 export default function MyMatch({ navigation }) {
     const [matchData, setMatchData] = useState([])
     const [loading, setLoading] = useState(false);
+
+    const showAlert = (message) =>
+        Alert.alert(
+            "Error",
+            message,
+            [
+                {
+                    text: "OK", onPress: () => {}
+                }
+            ]
+        );
 
     async function fetchMatchData() {
         try {
@@ -23,7 +34,8 @@ export default function MyMatch({ navigation }) {
                 })
             setMatchData(data)
         } catch (error) {
-            console.log(error);
+            let errorMessage = error.response.data.message ?? 'Error making network request, please check your internet connection'
+            showAlert(errorMessage)
         } finally {
             setLoading(false);
         }
@@ -35,13 +47,23 @@ export default function MyMatch({ navigation }) {
         }, [])
     )
 
-    // useEffect(() => {
-    //     fetchMatchData()
-    // }, [])
-
-    if (!matchData) {
+    const emptyList = () => {
         return (
-            <ActivityIndicator size='large' color='#ADD6FF' />
+            <View
+                style={{
+                    marginTop: 70,
+                    alignSelf: 'center',
+                    marginHorizontal: 20
+                }}
+            >
+                <Text
+                    style={{
+                        fontSize: 20,
+                        fontWeight: "bold",
+                        color: "#FD841F",
+                    }}
+                >You have not created any match yet.</Text>
+            </View>
         )
     }
 
@@ -57,8 +79,16 @@ export default function MyMatch({ navigation }) {
             flex: 1
         }}>
             {loading &&
-              <ActivityIndicator size="large" color="#000000" style={{left: 0, top:0, right: 0, bottom: 0, justifyContent:"center", alignItems: "center", position: "absolute", zIndex: 3}}/>
-            }
+                <View
+                    style={{
+                        width: '100%',
+                        height: '100%',
+                        position: "absolute",
+                        zIndex: 9,
+                        backgroundColor: 'rgba(255,255,255,0.9)',
+                    }}>
+                    <ActivityIndicator size="large" color="#000000" style={{ left: 0, top: 0, right: 0, bottom: 0, justifyContent: "center", alignItems: "center", position: "absolute", zIndex: 10 }} />
+                </View>}
             <View style={{
                 backgroundColor: "#FD841F",
                 height: "20%",
@@ -85,6 +115,7 @@ export default function MyMatch({ navigation }) {
             <FlatList
                 style={{ height: 400 }}
                 contentContainerStyle={{ justifyContent: 'center' }}
+                ListEmptyComponent={emptyList}
                 data={matchData} renderItem={renderItem} keyExtractor={(item, idx) => idx}
             />
         </View>

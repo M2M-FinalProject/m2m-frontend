@@ -1,4 +1,4 @@
-import { ActivityIndicator, View, Text, TextInput, ScrollView, FlatList, StyleSheet } from 'react-native'
+import { ActivityIndicator, View, Text, TextInput, ScrollView, FlatList, StyleSheet, Alert } from 'react-native'
 import { useFocusEffect } from '@react-navigation/native'
 import { Chip } from '@rneui/themed'
 import { useSelector, useDispatch } from 'react-redux'
@@ -34,7 +34,7 @@ export default function Home({ navigation }) {
             setChips(data)
         } catch (error) {
             console.log(error);
-        }finally {
+        } finally {
             setLoading(false);
         }
     }
@@ -54,9 +54,23 @@ export default function Home({ navigation }) {
         }
     }, [category, matches])
 
-    if (!matches) {
+    const emptyList = () => {
         return (
-            <ActivityIndicator size='large' color='#ADD6FF' />
+            <View
+                style={{
+                    marginTop: 70,
+                    alignSelf: 'center',
+                    marginHorizontal: 20
+                }}
+            >
+                <Text
+                    style={{
+                        fontSize: 20,
+                        fontWeight: "bold",
+                        color: "#FD841F",
+                    }}
+                >Sorry, there is no match in this category yet.</Text>
+            </View>
         )
     }
 
@@ -81,8 +95,16 @@ export default function Home({ navigation }) {
             marginTop: 0
         }}>
             {loading &&
-              <ActivityIndicator size="large" color="#000000" style={{left: 0, top:0, right: 0, bottom: 0, justifyContent:"center", alignItems: "center", position: "absolute", zIndex: 10}}/>
-            }
+                <View
+                    style={{
+                        width: '100%',
+                        height: '100%',
+                        position: "absolute",
+                        zIndex: 9,
+                        backgroundColor: 'rgba(255,255,255,0.9)',
+                    }}>
+                    <ActivityIndicator size="large" color="#000000" style={{ left: 0, top: 0, right: 0, bottom: 0, justifyContent: "center", alignItems: "center", position: "absolute", zIndex: 10 }} />
+                </View>}
             <View style={{
                 backgroundColor: "#FD841F",
                 height: "20%",
@@ -139,59 +161,6 @@ export default function Home({ navigation }) {
             </View>
 
             <View >
-                {/* <ScrollView
-                    horizontal
-                    showsHorizontalScrollIndicator={false}
-                    style={{
-                        width: "90%",
-                        marginHorizontal: 20,
-                        flexDirection: 'row'
-                    }}
-                    contentContainerStyle={{ height: 40 }}
-                >
-                    <Chip
-                        color={'#FD841F'}
-                        title={'Football'}
-                        containerStyle={{
-                            marginRight: 10,
-                        }}
-                    />
-                    <Chip
-                        color={'#FD841F'}
-                        title={'Basketball'}
-                        containerStyle={{
-                            marginRight: 10
-                        }}
-                    />
-                    <Chip
-                        color={'#FD841F'}
-                        title={'Tennis'}
-                        containerStyle={{
-                            marginRight: 10
-                        }}
-                    />
-                    <Chip
-                        color={'#FD841F'}
-                        title={'Jogging'}
-                        containerStyle={{
-                            marginRight: 10
-                        }}
-                    />
-                    <Chip
-                        color={'#FD841F'}
-                        title={'Futsal'}
-                        containerStyle={{
-                            marginRight: 10
-                        }}
-                    />
-                    <Chip
-                        color={'#FD841F'}
-                        title={'Swimming'}
-                        containerStyle={{
-                            marginRight: 10
-                        }}
-                    />
-                </ScrollView> */}
 
                 <ScrollView
                     horizontal
@@ -239,6 +208,7 @@ export default function Home({ navigation }) {
             <FlatList
                 style={{ height: 400 }}
                 contentContainerStyle={{ justifyContent: 'center' }}
+                ListEmptyComponent={emptyList}
                 data={
                     filterMatches?.filter(el => el.location.toLowerCase().includes(text.toLowerCase()))
                 }
