@@ -15,6 +15,7 @@ export default function SelectField({ navigation, route }){
     const { fields, error } = useSelector(state => {
         return state.fieldReducer
     })
+
     let token = ''
     const gettoken = async () => {
         try {
@@ -28,7 +29,7 @@ export default function SelectField({ navigation, route }){
           // error reading value
         }
     }
-    
+
     console.log(token, 'awal');
     // console.log(name, location, date, CategoryId, capacity, duration, type, description, 'DARI FORM');
     useEffect(() => {
@@ -50,9 +51,9 @@ export default function SelectField({ navigation, route }){
             </Text>
         )
     }
-    
+
     // function fieldSelect(e){
-        
+
     // }
 
     const renderItem = ({item}) => {
@@ -90,7 +91,7 @@ export default function SelectField({ navigation, route }){
                         console.log(err, 'ini errornya');
                         setError(err.message)
                         // console.log('geee');
-                    })     
+                    })
             }}>
                 <FieldCard field={item} />
             </TouchableOpacity>
@@ -109,14 +110,12 @@ export default function SelectField({ navigation, route }){
                     <Text style={styles.textStyle}>description: {description}</Text>
                 </View>
             </View>
-            <ScrollView >
-                <FlatList
-                    style={{display: 'flex'}}
-                    contentContainerStyle={{ justifyContent: 'center' }}
-                    data={fields} renderItem={renderItem} keyExtractor={(item,idx) => idx}
-                >
-                </FlatList>
-            </ScrollView>
+              <FlatList
+                  style={{display: 'flex'}}
+                  contentContainerStyle={{ justifyContent: 'center' }}
+                  data={fields} renderItem={renderItem} keyExtractor={(item,idx) => idx}
+              >
+              </FlatList>
         </SafeAreaView>
     )
 }
