@@ -14,6 +14,7 @@ export default function Home({ navigation }) {
     const [text, setText] = useState('');
     const [category, setCategory] = useState('All');
     const [filterMatches, setFilterMatches] = useState([]);
+    const [loading, setLoading] = useState(false);
 
     function changeCategory(categoryId) {
         setCategory(categoryId)
@@ -25,6 +26,7 @@ export default function Home({ navigation }) {
 
     async function fetchChips() {
         try {
+            setLoading(true);
             const access_token = await AsyncStorage.getItem('@access_token')
             const { data } = await axios.get(`https://m2m-api.herokuapp.com/categories`, {
                 headers: access_token
@@ -32,6 +34,8 @@ export default function Home({ navigation }) {
             setChips(data)
         } catch (error) {
             console.log(error);
+        }finally {
+            setLoading(false);
         }
     }
 
@@ -76,6 +80,9 @@ export default function Home({ navigation }) {
             flex: 1,
             marginTop: 0
         }}>
+            {loading &&
+              <ActivityIndicator size="large" color="#000000" style={{left: 0, top:0, right: 0, bottom: 0, justifyContent:"center", alignItems: "center", position: "absolute", zIndex: 10}}/>
+            }
             <View style={{
                 backgroundColor: "#FD841F",
                 height: "20%",
