@@ -105,17 +105,18 @@ export default function SelectField({ navigation, route }){
                     <Text style={styles.textStyle}>Match Name: {name}</Text>
                     <Text style={styles.textStyle}>Location: {location}</Text>
                     <Text style={styles.textStyle}>Date: {displayDate}</Text>
-                    <Text style={styles.textStyle}>capacity: {capacity}</Text>
-                    <Text style={styles.textStyle}>duration: {duration}</Text>
-                    <Text style={styles.textStyle}>description: {description}</Text>
+                    <Text style={styles.textStyle}>Capacity: {capacity}</Text>
+                    <Text style={styles.textStyle}>Duration: {duration}</Text>
+                    <Text style={styles.textStyle}>Description: {description}</Text>
                 </View>
             </View>
-              <FlatList
-                  style={{display: 'flex'}}
-                  contentContainerStyle={{ justifyContent: 'center' }}
-                  data={fields} renderItem={renderItem} keyExtractor={(item,idx) => idx}
-              >
-              </FlatList>
+            <FlatList
+                style={{display: 'flex',borderTopWidth:1, borderColor:'#fff', marginHorizontal:15}}
+                contentContainerStyle={{ justifyContent: 'center', alignItems: 'center' }}
+                data={fields} renderItem={renderItem} keyExtractor={(item,idx) => idx}
+            >
+            </FlatList>
+ 
         </SafeAreaView>
     )
 }
@@ -127,19 +128,29 @@ const styles = StyleSheet.create({
         justifyContent: 'flex-start',
     },
     headerText: {
-        fontSize: 25,
+        fontSize: 20,
         color: '#FD841F',
         fontFamily: 'Roboto',
-        fontWeight: "900"
+        fontWeight: "900",
+        marginBottom:15
     },
     prevInput:{
+        width:300,
+        marginLeft:50,
         backgroundColor: '#fff',
-        marginHorizontal: 30,
-        marginVertical: 10,
-        padding: 20,
+        marginHorizontal: 40,
+        marginVertical: 15,
+        padding: 10,
         borderRadius: 10
+        
     },
     textStyle: {
-        color: '#FD841F'
+        color: 'grey'
+    },
+    boxSelect:{
+        height:350,
+        margin:10,
+        width:10,
+        backgroundColor:'#fff',
     }
 })
