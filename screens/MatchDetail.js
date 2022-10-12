@@ -1,10 +1,10 @@
 import { Button, Text } from "@rneui/base"
-import { View, Image, ActivityIndicatorm, Alert } from "react-native"
+import { View, Image, ActivityIndicator, Alert, StyleSheet } from "react-native"
 import axios from 'axios'
 import { useFocusEffect } from "@react-navigation/native"
 import { useState, useEffect, useCallback } from 'react'
 import AsyncStorage from '@react-native-async-storage/async-storage';
-// import { useNavigation } from '@react-navigation/native';
+import { FontAwesome } from '@expo/vector-icons';
 
 
 
@@ -30,7 +30,7 @@ export default function MatchDetail({ route, navigation }) {
         } catch (error) {
             let errorMessage = error.response.data.message ?? 'Error making network request, please check your internet connection'
             showAlert(errorMessage)
-        }finally {
+        } finally {
             setLoading(false);
         }
     }
@@ -62,7 +62,7 @@ export default function MatchDetail({ route, navigation }) {
         } catch (error) {
             let errorMessage = error.response.data.message ?? 'Error making network request, please check your internet connection'
             showAlert(errorMessage)
-        }finally{
+        } finally {
             setLoading(false);
         }
     }
@@ -82,7 +82,7 @@ export default function MatchDetail({ route, navigation }) {
         } catch (error) {
             let errorMessage = error.response.data.message ?? 'Error making network request, please check your internet connection'
             showAlert(errorMessage)
-        } finally{
+        } finally {
             setLoading(false);
         }
     }
@@ -101,7 +101,7 @@ export default function MatchDetail({ route, navigation }) {
             message,
             [
                 {
-                    text: "OK", onPress: () => {}
+                    text: "OK", onPress: () => { }
                 }
             ]
         );
@@ -233,20 +233,19 @@ export default function MatchDetail({ route, navigation }) {
             }}
         >
             {loading &&
-              <View
-              style={{ 
-                width: '100%',
-                height: '100%',
-                position: "absolute",
-                zIndex: 9,
-                backgroundColor: 'rgba(255,255,255,0.9)',
-              }}>
-                  <ActivityIndicator size="large" color="#000000" style={{left: 0, top:0, right: 0, bottom: 0, justifyContent:"center", alignItems: "center", position: "absolute", zIndex: 10}}/>
-              </View>
+                <View
+                    style={{
+                        width: '100%',
+                        height: '100%',
+                        position: "absolute",
+                        zIndex: 9,
+                        backgroundColor: 'rgba(255,255,255,0.9)',
+                    }}>
+                    <ActivityIndicator size="large" color="#000000" style={{ left: 0, top: 0, right: 0, bottom: 0, justifyContent: "center", alignItems: "center", position: "absolute", zIndex: 10 }} />
+                </View>
             }
             <View
                 style={{
-                    flex: 4,
                     elevation: 3,
                     backgroundColor: "#FFF",
                     marginLeft: 20,
@@ -268,51 +267,102 @@ export default function MatchDetail({ route, navigation }) {
                 />
                 <View style={{
                     width: '100%',
-                    paddingTop: 10,
-                    paddingHorizontal: 10
+                    position: "absolute",
+                    padding:10
                 }}>
-                    <View style={{
+                    <Text style={{
                         backgroundColor: "#FD841F",
                         paddingHorizontal: 20,
                         paddingVertical: 5,
                         borderRadius: 15,
-                        marginBottom: 30
-                    }}>
-                        <Text style={{
-                            fontWeight: "bold",
-                            fontSize: 15,
-                            color: "#FFF",
-                            alignSelf: 'center'
-                        }}>{detailData.Category.name}</Text>
+                        fontWeight: "bold",
+                        fontSize: 15,
+                        color: "#FFF",
+                        alignSelf: "flex-end"
+                    }}>{detailData.Category.name}</Text>
+                </View>
+                <View style={{
+                    width: '100%',
+                    paddingTop: 10,
+                    paddingHorizontal: 10
+                }}>
+                    <View style={styles.info}>
+                        <Text style={styles.primaryText}>{detailData.name}</Text>
                     </View>
                     <Text style={{
                         fontWeight: "bold",
-                        color: "#FD841F",
-                    }}>{detailData.name}
-                    </Text>
-                    <Text style={{
-                        fontWeight: "bold",
+                        marginHorizontal: 15
                     }}>{detailData.description}
                     </Text>
-                    <Text style={{
-                        fontWeight: "bold",
-                    }}>{detailData.date}
-                    </Text>
-                    <Text style={{
-                        fontWeight: "bold",
-                    }}>{detailData.location}
-                    </Text>
-                    <Text style={{
-                        fontWeight: "bold",
-                    }}>{detailData.currentCapacity} out of {detailData.capacity} person joined
-                    </Text>
-                    <Text style={{
-                        fontWeight: "bold",
-                    }}>Match created by{detailData.UserId}
-                    </Text>
+
+                    <View
+                        style={{
+                            flexDirection: "row",
+                            justifyContent: "space-around",
+                            marginTop: 20
+                        }}
+                    >
+                        <View
+                            style={{
+                                flexDirection: "column",
+                                width: '40%'
+                            }}
+                        >
+                            <View style={styles.rowsInfo}>
+                                <FontAwesome name="calendar" size={20} color="#7e7e7e" />
+                                <Text style={styles.basicText}>{new Date(detailData.date).toDateString()}
+                                </Text>
+                            </View>
+                            <View style={styles.rowsInfo}>
+                                <FontAwesome name="map" size={20} color="#7e7e7e" />
+                                <Text style={styles.basicText}>{detailData.location}
+                                </Text>
+                            </View>
+                        </View>
+                        <View
+                            style={{
+                                flexDirection: "column",
+                                width: '40%'
+                            }}
+                        >
+                            <View style={styles.rowsInfo}>
+                                <FontAwesome name="users" size={20} color="#7e7e7e" />
+                                <Text style={styles.basicText}>{detailData.currentCapacity} / {detailData.capacity} joined
+                                </Text>
+                            </View>
+                            <View style={styles.rowsInfo}>
+                                <FontAwesome name="pencil" size={20} color="#7e7e7e" />
+                                <Text style={styles.basicText}>Created by {detailData.User.name}
+                                </Text>
+                            </View>
+
+                        </View>
+
+                    </View>
+
+
+
+
                     <Text>
                         {null}
                     </Text>
+
+                    <View
+                    style={{
+                        marginHorizontal: 15
+                    }}>
+                    {
+                        detailData.Field &&
+                        <View style={[styles.rowsInfo, {marginBottom:8}]}>
+                            <FontAwesome name="map-marker" size={20} color="#7e7e7e" />
+                            <Text 
+                            style={{
+                                fontSize:18
+                            }}> Location Detail
+                            </Text>
+                        </View>
+                    }
+
                     <Text style={{
                         fontWeight: "bold",
                     }}>{detailData.Field?.name}
@@ -321,6 +371,8 @@ export default function MatchDetail({ route, navigation }) {
                         fontWeight: "bold",
                     }}>{detailData.Field?.location}
                     </Text>
+                    </View>
+                    
                 </View>
 
                 <View
@@ -360,4 +412,57 @@ export default function MatchDetail({ route, navigation }) {
             </View>
         </View>
     )
-}  
+}
+
+const styles = StyleSheet.create({
+    container: {
+        height: 200,
+        elevation: 3,
+        backgroundColor: "#FFF",
+        marginLeft: 20,
+        marginTop: 20,
+        borderRadius: 15,
+        marginBottom: 10,
+        width: '90%',
+        flexDirection: "row"
+    },
+    imageStyle: {
+        width: '35%',
+        height: '100%',
+        borderTopLeftRadius: 15,
+        borderBottomLeftRadius: 15,
+    },
+    info: {
+        width: '65%',
+        padding: 10,
+        justifyContent: 'space-between'
+    },
+    bannerCategory: {
+        width: 130,
+        backgroundColor: "#FD841F",
+        paddingHorizontal: 20,
+        paddingVertical: 5,
+        borderRadius: 15,
+    },
+    bannerText: {
+        fontWeight: "bold",
+        fontSize: 15,
+        color: "#FFF",
+        alignSelf: 'center'
+    },
+    primaryText: {
+        fontWeight: "bold",
+        color: "#FD841F",
+        fontSize: 20
+    },
+    basicText: {
+        // fontWeight: "bold",
+        fontFamily: 'Roboto',
+        color: '#7e7e7e',
+        marginLeft: 15
+    },
+    rowsInfo: {
+        flexDirection: 'row',
+        marginVertical: 2
+    }
+})

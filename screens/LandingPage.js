@@ -16,9 +16,9 @@ export default function LandingPage({navigation}){
           // error reading value
         }
     }
-    // if(getData()){
-    //     navigation.navigate('HomeNavigator')
-    // }
+    if(getData()){
+        navigation.navigate('HomeNavigator')
+    }
     return(
         <SafeAreaView style={styles.container}>
             <StatusBar 
