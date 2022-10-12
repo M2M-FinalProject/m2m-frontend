@@ -8,6 +8,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 export default function MatchDetail({ route, navigation }) {
     const [detailData, setDetailData] = useState({})
     const [userId, setUserId] = useState('')
+    const [accToken, setAccToken] = useState('')
 
     async function fetchDetail() {
         try {
@@ -27,7 +28,9 @@ export default function MatchDetail({ route, navigation }) {
     async function getLocalStorage() {
         try {
             const id = await AsyncStorage.getItem('@id')
+            const access_token = await AsyncStorage.getItem('@access_token')
             setUserId(id)
+            setAccToken(access_token)
         } catch (error) {
             console.log(error);
         }
@@ -67,6 +70,7 @@ export default function MatchDetail({ route, navigation }) {
 
     let button
     let showchat
+    let leaveMatchButton
     let user = detailData.MatchDetails.find(el => el.UserId == userId)
 
     if (detailData.UserId == userId) {
@@ -74,6 +78,20 @@ export default function MatchDetail({ route, navigation }) {
             <Button
                 onPress={() => toRequest()}
                 title={'See join requests'}
+                buttonStyle={{
+                    borderRadius: 25
+                }}
+            >
+            </Button>
+        )
+
+        showchat = (
+            <Button
+                title={'Show Chat'}
+                onPress={() => navigation.navigate('ChatComponent', {
+                    id: detailData.id,
+                    userId : userId
+                })}
                 buttonStyle={{
                     borderRadius: 25
                 }}
@@ -107,7 +125,22 @@ export default function MatchDetail({ route, navigation }) {
         showchat = (
             <Button
                 title={'Show Chat'}
-                // onPress={() => joinMatch()}
+                onPress={() => navigation.navigate('ChatComponent', {
+                    id: detailData.id,
+                    userId : userId
+                })}
+                buttonStyle={{
+                    borderRadius: 25
+                }}
+            >
+            </Button>
+        )
+
+        leaveMatchButton = (
+            <Button
+                title={'Leave Match'}
+                color='error'
+                // onPress={}
                 buttonStyle={{
                     borderRadius: 25
                 }}
@@ -209,6 +242,10 @@ export default function MatchDetail({ route, navigation }) {
                         fontWeight: "bold",
                     }}>{detailData.currentCapacity} out of {detailData.capacity} person joined
                     </Text>
+                    <Text style={{
+                        fontWeight: "bold",
+                    }}>Match created by{detailData.UserId}
+                    </Text>
                     <Text>
                         {null}
                     </Text>
@@ -244,13 +281,18 @@ export default function MatchDetail({ route, navigation }) {
 
 
                 </View>
-            </View>
-            <View
-                style={{
-                    flex: 1
-                }}
-            >
+                <View
+                    style={{
+                        width: '100%',
+                        paddingTop: 10,
+                        paddingHorizontal: 10
+                    }}
+                >
 
+                    {leaveMatchButton}
+
+
+                </View>
             </View>
         </View>
     )

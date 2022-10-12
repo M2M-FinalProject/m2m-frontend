@@ -1,5 +1,5 @@
 import axios from 'axios'
-import { MATCH_FETCH_SUCCESS, MATCH_FETCH_ERROR,MATCH_FETCH_BY_ID_SUCCESS } from "./matchType";
+import { MATCH_FETCH_SUCCESS, MATCH_FETCH_ERROR, FIELD_FETCH_SUCCESS, FIELD_FETCH_ERROR } from "./matchType";
 const baseurl = `https://m2m-api.herokuapp.com`
 const access_token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NSwiaWF0IjoxNjY1Mzg1ODI2fQ.osJA8iDkLKCUctKXIF6khFhxLFsEsCiea5MVpF_U9tY"
 
@@ -17,6 +17,20 @@ export const matchFetchError = payload => {
     }
 }
 
+export const fieldFetchSuccess = payload => {
+    return {
+        type: FIELD_FETCH_SUCCESS,
+        payload
+    }
+}
+
+export const fieldFetchError = payload => {
+    return {
+        type: FIELD_FETCH_ERROR,
+        payload
+    }
+}
+
 export const fetchMatches = (query) => {
     return async dispatch => {
         try{
@@ -29,6 +43,24 @@ export const fetchMatches = (query) => {
         } catch(e){
             console.log(e);
             await dispatch(matchFetchError(e.message))
+        }
+    }
+}
+
+export const fetchFields = (query) => {
+    console.log(query,'DI MATCH');
+    return async dispatch => {
+        try{
+            const {data} = await axios(baseurl + '/fields',{
+                method:'GET',               
+                params: {
+                    category: query
+                }
+            })
+            await dispatch(fieldFetchSuccess(data))
+        } catch(e){
+            console.log(e);
+            await dispatch(fieldFetchError(e.message))
         }
     }
 }

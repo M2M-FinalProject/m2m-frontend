@@ -3,9 +3,22 @@ import {
   SafeAreaView,
 } from 'react-native-safe-area-context';
 import { StatusBar } from 'expo-status-bar';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 export default function LandingPage({navigation}){
-
+    const getData = async () => {
+        try {
+            const value = await AsyncStorage.getItem('@access_token')
+            if(value !== null) {
+                return value
+            }
+        } catch(e) {
+          // error reading value
+        }
+    }
+    // if(getData()){
+    //     navigation.navigate('HomeNavigator')
+    // }
     return(
         <SafeAreaView style={styles.container}>
             <StatusBar 
