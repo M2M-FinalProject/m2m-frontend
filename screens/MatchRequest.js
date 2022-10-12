@@ -1,4 +1,4 @@
-import { Text,View, FlatList } from 'react-native'
+import { Text, View, FlatList, ActivityIndicator, Alert } from 'react-native'
 import UserCard from '../components/UserCard'
 import axios from 'axios'
 import { useState, useEffect } from 'react'
@@ -7,9 +7,22 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 
 export default function MatchRequest({ route }) {
     const [requestData, setRequestData] = useState([])
+    const [loading, setLoading] = useState(false);
+
+    const showAlert = (message) =>
+        Alert.alert(
+            "Error",
+            message,
+            [
+                {
+                    text: "OK", onPress: () => {}
+                }
+            ]
+        );
 
     async function fetchMatchRequest() {
         try {
+            setLoading(true);
             const access_token = await AsyncStorage.getItem('@access_token')
             const { data } = await axios.get(`https://m2m-api.herokuapp.com/matches/${route.params.id}/participants`,
                 {
@@ -19,7 +32,10 @@ export default function MatchRequest({ route }) {
                 })
             setRequestData(data)
         } catch (error) {
-            console.log(error);
+            let errorMessage = error.response.data.message ?? 'Error making network request, please check your internet connection'
+            showAlert(errorMessage)
+        } finally {
+            setLoading(false);
         }
     }
 
@@ -33,26 +49,47 @@ export default function MatchRequest({ route }) {
         )
     }
 
-    if(requestData.length === 0){
-        return(
+    const emptyList = () => {
+        return (
             <View
-            style={{
-                marginTop: 40
-            }}
-        >
-            <Text>There is no request for your match</Text>
-        </View>
+                style={{
+                    marginTop: 150,
+                    alignSelf: 'center',
+                    marginHorizontal: 20
+                }}
+            >
+                <Text
+                    style={{
+                        fontSize: 20,
+                        fontWeight: "bold",
+                        color: "#FD841F",
+                    }}
+                >There is no join request at the moment.</Text>
+            </View>
         )
     }
 
     return (
         <View
             style={{
+                flex: 1,
                 marginTop: 40
             }}
         >
+            {loading &&
+                <View
+                    style={{
+                        width: '100%',
+                        height: '100%',
+                        position: "absolute",
+                        zIndex: 9,
+                        backgroundColor: 'rgba(255,255,255,0.9)',
+                    }}>
+                    <ActivityIndicator size="large" color="#000000" style={{ left: 0, top: 0, right: 0, bottom: 0, justifyContent: "center", alignItems: "center", position: "absolute", zIndex: 10 }} />
+                </View>}
             <FlatList
                 contentContainerStyle={{ justifyContent: 'center' }}
+                ListEmptyComponent={emptyList}
                 data={requestData} renderItem={renderItem} keyExtractor={(item, idx) => idx}
             />
         </View>
