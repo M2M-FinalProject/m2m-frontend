@@ -1,7 +1,8 @@
 import { View, Text } from 'react-native'
 import { FlatList } from 'react-native'
 import axios from 'axios'
-import { useEffect, useState } from 'react'
+import { useFocusEffect } from '@react-navigation/native'
+import { useEffect, useState, useCallback } from 'react'
 import MatchCard from '../components/MatchCard'
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
@@ -25,10 +26,15 @@ export default function MyMatch({ navigation }) {
         }
     }
 
+    useFocusEffect(
+        useCallback(() => {
+            fetchMatchData()
+        }, [])
+    )
 
-    useEffect(() => {
-        fetchMatchData()
-    }, [])
+    // useEffect(() => {
+    //     fetchMatchData()
+    // }, [])
 
     if (!matchData) {
         return (
