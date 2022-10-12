@@ -8,7 +8,7 @@ import MatchRequest from './screens/MatchRequest';
 import MatchDetail from './screens/MatchDetail';
 import { Provider } from 'react-redux'
 import store from './store';
-
+import ChatComponent from './screens/ChatComponent';
 import { StatusBar } from 'expo-status-bar';
 import { StyleSheet, Text, View } from 'react-native';
 import LandingPage from './screens/LandingPage'
@@ -41,6 +41,7 @@ export default function App() {
             <Tab.Screen name='MatchDetail' component={MatchDetail} />
             <Tab.Screen name='MatchRequest' component={MatchRequest} />
             <Stack.Screen name="Register" component={RegisterPage} />
+            <Tab.Screen name='ChatComponent' component={ChatComponent} />
           </Stack.Navigator>
         </NavigationContainer>
     </Provider>
